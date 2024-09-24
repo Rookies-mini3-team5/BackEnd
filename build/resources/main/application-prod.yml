@@ -1,0 +1,22 @@
+spring:
+  datasource:
+    url: jdbc:mariadb://${DB_HOST:127.0.0.1}:${DB_PORT:3307}/${DB_DATABASE:interview_partner}
+    username: ${DB_USERNAME:potato}
+    password: ${DB_PASSWORD:potato}
+    driverClassName: org.mariadb.jdbc.Driver
+  jpa:
+    show-sql: true
+    properties:
+      dialect: org.hibernate.dialect.MariaDBDialect
+    hibernate:
+      ddl-auto: validate
+      default_batch_fetch_size: 100
+  servlet:
+    multipart:
+      location: /home/storage/
+      max-file-size: 10MB
+      max-request-size: 10MB
+
+token:
+  expiration-time: 86400000
+  secret: VisitBBCfortrustedreportingonthelatestworldandUSnewssp
