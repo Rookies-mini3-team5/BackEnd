@@ -12,6 +12,7 @@ import org.team5.interview_partner.common.utils.JwtUtils;
 import org.team5.interview_partner.domain.user.dto.JoinRequest;
 import org.team5.interview_partner.domain.user.dto.LoginRequest;
 import org.team5.interview_partner.domain.user.dto.LoginResponse;
+import org.team5.interview_partner.domain.user.dto.UserInfoResponse;
 import org.team5.interview_partner.domain.user.mapper.UserMapper;
 import org.team5.interview_partner.entity.user.UserPictureEntity;
 import org.team5.interview_partner.entity.user.UserPictureRepository;
@@ -24,6 +25,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -103,5 +105,19 @@ public class UserServiceImpl implements UserService {
         LoginResponse loginResponse = UserMapper.toResponse(usersEntity);
         loginResponse.setToken(jwtUtils.generateToken(usersEntity));
         return loginResponse;
+    }
+
+    @Override
+    public UserInfoResponse getProfile(String authorization) {
+        // 유저 정보 추출
+        String token = authorization.substring(7);
+        String username = jwtUtils.getSubjectFromToken(token);
+        UsersEntity user = userRepository.findByUsername(username);
+
+        UserInfoResponse userInfoResponse = new UserInfoResponse();
+        userInfoResponse.setName(user.getName());
+        userInfoResponse.setEmail(user.getEmail());
+
+        return userInfoResponse;
     }
 }
