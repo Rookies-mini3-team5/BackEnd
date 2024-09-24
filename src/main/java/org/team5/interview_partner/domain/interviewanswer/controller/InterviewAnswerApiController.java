@@ -26,7 +26,8 @@ public class InterviewAnswerApiController {
     public Api<InterviewAnswerListResponse> interviewAnswerList(
             @PathVariable("gptQeustionId") int gptQeustionId
     ){
-
+        InterviewAnswerListResponse interviewAnswerListResponse = interviewAnswerService.interviewAnswerList(gptQeustionId);
+        return Api.OK(interviewAnswerListResponse);
     }
 
 }
