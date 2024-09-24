@@ -36,7 +36,7 @@ public class UserQuestionApiController {
     }
 
     //질문 답변 조회
-    @GetMapping("/{userQuestionId}")
+    @GetMapping("/one/{userQuestionId}")
     public Api<UserQuestionResponse> userQuestion(
             @PathVariable("userQuestionId") int userQuestionId
     ){

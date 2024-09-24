@@ -3,12 +3,13 @@ package org.team5.interview_partner.domain.interviewanswer.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import org.team5.interview_partner.common.api.Api;
+import org.team5.interview_partner.domain.interviewanswer.dto.InterviewAnswerListResponse;
 import org.team5.interview_partner.domain.interviewanswer.dto.InterviewAnswerRequest;
 import org.team5.interview_partner.domain.interviewanswer.service.InterviewAnswerService;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/section/gpt/answer")
+@RequestMapping("/api/section/interview/answer")
 public class InterviewAnswerApiController {
     private final InterviewAnswerService interviewAnswerService;
 
@@ -21,6 +22,11 @@ public class InterviewAnswerApiController {
         return Api.CREATE();
     }
 
+    @GetMapping("/list/{gptQeustionId}")
+    public Api<InterviewAnswerListResponse> interviewAnswerList(
+            @PathVariable("gptQeustionId") int gptQeustionId
+    ){
 
+    }
 
 }

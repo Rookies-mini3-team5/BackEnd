@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.team5.interview_partner.common.error.ErrorCode;
 import org.team5.interview_partner.common.exception.ApiException;
+import org.team5.interview_partner.domain.interviewanswer.dto.InterviewAnswerListResponse;
 import org.team5.interview_partner.domain.interviewanswer.dto.InterviewAnswerRequest;
 import org.team5.interview_partner.domain.interviewanswer.mapper.InterviewAnswerMapper;
 import org.team5.interview_partner.entity.gptquestion.GptQeustionRepository;
@@ -27,5 +28,10 @@ public class InterviewAnswerServiceImpl implements InterviewAnswerService{
 
         interviewAnswerRepository.save(interviewAnswerEntity);
 
+    }
+
+    @Override
+    public InterviewAnswerListResponse interviewAnswerList(int gptQuestionId) {
+        return null;
     }
 }
