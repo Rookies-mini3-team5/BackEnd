@@ -23,9 +23,9 @@ public class Api<T> {
         return api;
     }
 
-    public static <T> Api<T> CREATE(){
-        var api = new Api<T>();
-        api.result = Result.OK();
+    public static Api<Object> CREATE(){
+        var api = new Api<java.lang.Object>();
+        api.result = Result.CREATE();
         return api;
     }
     //에러 응답
