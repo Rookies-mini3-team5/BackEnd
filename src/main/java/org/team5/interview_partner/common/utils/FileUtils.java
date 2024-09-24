@@ -15,13 +15,13 @@ public class FileUtils {
     @Value("${spring.servlet.multipart.location}")
     private String baseUploadDir; // 기본 업로드 디렉토리
 
-    public String storeFile(MultipartFile file, String nickname) throws Exception {
+    public String storeFile(MultipartFile file, String username) throws Exception {
         if (ObjectUtils.isEmpty(file) || file.isEmpty()) {
             return null;
         }
 
         // 사용자별 디렉토리를 지정
-        String userDir = baseUploadDir + File.separator + nickname;
+        String userDir = baseUploadDir + File.separator + username;
         File dir = new File(userDir);
         if (!dir.exists()) {
             dir.mkdirs(); // 다중 디렉토리 생성

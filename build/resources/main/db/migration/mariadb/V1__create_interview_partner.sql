@@ -1,7 +1,7 @@
 CREATE TABLE `user` (
     `id` integer PRIMARY KEY AUTO_INCREMENT,
     `username` varchar(50) UNIQUE NOT NULL,
-    `name` varchar(50) UNIQUE NOT NULL,
+    `name` varchar(50) NOT NULL,
     `password` varchar(100) NOT NULL,
     `email` varchar(100) NOT NULL ,
     `role` varchar(10) NOT NULL,
@@ -27,7 +27,8 @@ CREATE TABLE `section` (
     `name` varchar(100) NOT NULL,
     `resume` text,
     `emphasize` text,
-    `created_at` datetime NOT NULL
+    `created_at` datetime NOT NULL,
+    `updated_at` datetime NOT NULL
 )engine=InnoDB;
 
 CREATE TABLE `gpt_question` (
