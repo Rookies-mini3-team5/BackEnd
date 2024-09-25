@@ -52,7 +52,7 @@ public class GptApiService {
                 .orElseThrow(()->new ApiException(ErrorCode.BAD_REQUEST));
 
         //직군 및 직업 정보 가져오기
-        JobEntity jobEntity = jobRepository.findById(sectionEntity.getJobId())
+        JobEntity jobEntity = jobRepository.findById(sectionEntity.getJob().getId())
                 .orElseThrow(()->new ApiException(ErrorCode.BAD_REQUEST));
 
         //gpt 파인튜닝
