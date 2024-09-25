@@ -47,6 +47,7 @@ public class GptApiService {
 
     //면접 질문 fine tuning
     public List<Message> fineTuning(int setctionId){
+
         //섹션 정보 가져오기
         SectionEntity sectionEntity = sectionRepository.findById(setctionId)
                 .orElseThrow(()->new ApiException(ErrorCode.BAD_REQUEST));
