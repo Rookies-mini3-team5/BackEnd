@@ -1,13 +1,12 @@
 package org.team5.interview_partner.domain.section.controller;
 
+import jakarta.persistence.criteria.CriteriaBuilder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 import org.team5.interview_partner.common.api.Api;
 import org.team5.interview_partner.common.utils.JwtUtils;
-import org.team5.interview_partner.domain.section.dto.AddSectionRequest;
-import org.team5.interview_partner.domain.section.dto.AddSectionResponse;
-import org.team5.interview_partner.domain.section.dto.SectionInfoResponse;
+import org.team5.interview_partner.domain.section.dto.*;
 import org.team5.interview_partner.domain.section.service.SectionService;
 import org.team5.interview_partner.entity.user.UserRepository;
 
@@ -37,5 +36,15 @@ public class SectionApiController {
     ){
         AddSectionResponse addSectionResponse = sectionService.addSection(authorization, addSectionRequest);
         return Api.OK(addSectionResponse);
+    }
+
+    @PostMapping("/section/{sectionId}")
+    public Api<List<AddSectionResumeResponse>> addSectionResumeResponse(
+            @RequestHeader("Authorization") String authorization,
+            @RequestBody(required = false) AddSectionResumeRequest addSectionResumeRequest,
+            @PathVariable("sectionId") int sectionId
+            ){
+        List<AddSectionResumeResponse> addSectionResumeResponse = sectionService.addSectionResume(authorization, addSectionResumeRequest, sectionId);
+        return Api.OK(addSectionResumeResponse);
     }
 }

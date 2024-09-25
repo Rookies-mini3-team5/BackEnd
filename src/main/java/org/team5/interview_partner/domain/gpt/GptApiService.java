@@ -46,10 +46,9 @@ public class GptApiService {
     private final InterviewAnswerRepository interviewAnswerRepository;
 
     //면접 질문 fine tuning
-    public List<Message> fineTuning(int setctionId){
-
+    public List<Message> fineTuning(int sectionId){
         //섹션 정보 가져오기
-        SectionEntity sectionEntity = sectionRepository.findById(setctionId)
+        SectionEntity sectionEntity = sectionRepository.findById(sectionId)
                 .orElseThrow(()->new ApiException(ErrorCode.BAD_REQUEST));
 
         //직군 및 직업 정보 가져오기
@@ -73,7 +72,7 @@ public class GptApiService {
             fineTuning_answer = sectionEntity.getResume()+"한 이력과 "+ sectionEntity.getEmphasize()+" 한 점을 강조 하고 싶으시군요. 참고해서 추후 대답에 적용하겠습니다.";
         }else if(!sectionEntity.getResume().isEmpty()){
             fineTuning = "나는 "+sectionEntity.getResume()+" 한 이력이 있어";
-            fineTuning_answer = sectionEntity.getResume()+"한 이력이 있으니군요 참고해서 추후 대답에 적용하겠습니다.";
+            fineTuning_answer = sectionEntity.getResume()+"한 이력이 있으시군요. 참고해서 추후 대답에 적용하겠습니다.";
         }else if(!sectionEntity.getEmphasize().isEmpty()){
             fineTuning = "나는 "+sectionEntity.getEmphasize()+" 한 점을 강조하고 싶다.";
             fineTuning_answer = sectionEntity.getEmphasize()+" 한 점을 강조 하고 싶으시군요. 참고해서 추후 대답에 적용하겠습니다.";
@@ -83,7 +82,6 @@ public class GptApiService {
         gpt = new Message("system",fineTuning_answer);
         messageList.add(user);
         messageList.add(gpt);
-
 
         return messageList;
     }
