@@ -9,10 +9,7 @@ import org.team5.interview_partner.common.error.ErrorCode;
 import org.team5.interview_partner.common.exception.ApiException;
 import org.team5.interview_partner.common.utils.FileUtils;
 import org.team5.interview_partner.common.utils.JwtUtils;
-import org.team5.interview_partner.domain.user.dto.JoinRequest;
-import org.team5.interview_partner.domain.user.dto.LoginRequest;
-import org.team5.interview_partner.domain.user.dto.LoginResponse;
-import org.team5.interview_partner.domain.user.dto.UserInfoResponse;
+import org.team5.interview_partner.domain.user.dto.*;
 import org.team5.interview_partner.domain.user.mapper.UserMapper;
 import org.team5.interview_partner.entity.user.UserPictureEntity;
 import org.team5.interview_partner.entity.user.UserPictureRepository;
@@ -24,6 +21,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -36,20 +34,21 @@ public class UserServiceImpl implements UserService {
     private final JwtUtils jwtUtils;
     private final FileUtils fileUtils;
 
+    // 기본 파일 저장소 경로
     @Value("${spring.servlet.multipart.location}")
     private String uploadPath;
 
     //회원가입
-    public void join(JoinRequest joinRequest, MultipartFile file) throws Exception{
+    public void join(JoinRequest joinRequest, MultipartFile file) throws Exception {
 
         // Check if username already exists
         if (userRepository.existsByUsername(joinRequest.getUsername())) {
-            throw new ApiException(ErrorCode.BAD_REQUEST,"이미 존재하는 ID입니다.");
+            throw new ApiException(ErrorCode.BAD_REQUEST, "이미 존재하는 ID입니다.");
         }
 
         // Check if nickname already exists
         if (userRepository.existsByEmail(joinRequest.getEmail())) {
-            throw new ApiException(ErrorCode.BAD_REQUEST,"이미 존재하는 이메일입니다.");
+            throw new ApiException(ErrorCode.BAD_REQUEST, "이미 존재하는 이메일입니다.");
         }
 
         // 1. Create and save the user
@@ -92,21 +91,23 @@ public class UserServiceImpl implements UserService {
         userPictureRepository.save(userPicture);
     }
 
+    // 로그인
     @Override
     public LoginResponse login(LoginRequest loginRequest) {
         //유저 유무 확인
         UsersEntity usersEntity = Optional.ofNullable(userRepository.findByUsernameAndRole(loginRequest.getUsername(), Role.ROLE_USER))
-                .orElseThrow(()->new ApiException(ErrorCode.BAD_REQUEST,"유저 정보가 없습니다."));
+                .orElseThrow(() -> new ApiException(ErrorCode.BAD_REQUEST, "유저 정보가 없습니다."));
         //바말번호 확인
         boolean passwordMatch = bCryptPasswordEncoder.matches(loginRequest.getPassword(), usersEntity.getPassword());
-        if(!passwordMatch){
-            throw new ApiException(ErrorCode.BAD_REQUEST,"비밀번호가 틀렸습니다.");
+        if (!passwordMatch) {
+            throw new ApiException(ErrorCode.BAD_REQUEST, "비밀번호가 틀렸습니다.");
         }
         LoginResponse loginResponse = UserMapper.toResponse(usersEntity);
         loginResponse.setToken(jwtUtils.generateToken(usersEntity));
         return loginResponse;
     }
 
+    // 프로필 조회
     @Override
     public UserInfoResponse getProfile(String authorization) {
         // 유저 정보 추출
@@ -119,5 +120,44 @@ public class UserServiceImpl implements UserService {
         userInfoResponse.setEmail(user.getEmail());
 
         return userInfoResponse;
+    }
+
+    // 프로필 수정
+    @Override
+    public void updateProfile(UpdateProfileRequest updateProfileRequest, MultipartFile file, String authorization) throws Exception {
+
+        // 유저 정보 추출
+        String token = authorization.substring(7);
+        String username = jwtUtils.getSubjectFromToken(token);
+        UsersEntity user = userRepository.findByUsername(username);
+
+        if(updateProfileRequest != null) {
+            if (updateProfileRequest.getName() != null) {
+                user.setName(updateProfileRequest.getName());
+            }
+
+            if (updateProfileRequest.getEmail() != null){
+                user.setEmail(updateProfileRequest.getEmail());
+            }
+
+            userRepository.save(user);
+        }
+
+        // 프사 업데이트
+        if (file != null && !file.isEmpty()) {
+
+            UserPictureEntity userPicture = userPictureRepository.findByUserId(user.getId());
+
+            // 회원가입 시 프사가 설정되므로 기본 프사가 아닐 시 삭제 후 작업
+            if(!Objects.equals(userPicture.getFilePath(), Paths.get(uploadPath, "defaultPicture.jpg").toString())) {
+                fileUtils.deleteFile(userPicture.getFilePath());
+            }
+
+            userPicture.setOriginalFileName(file.getOriginalFilename());
+            userPicture.setFilePath(fileUtils.storeFile(file, user.getUsername()));
+            userPicture.setFileSize(String.valueOf(file.getSize()));
+
+            userPictureRepository.save(userPicture);
+        }
     }
 }
