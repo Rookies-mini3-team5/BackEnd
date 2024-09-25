@@ -61,4 +61,14 @@ public class SectionApiController {
         GetSectionInfoResponse getSectionInfoResponse = sectionService.getSectionInfo(authorization, sectionId);
         return Api.OK(getSectionInfoResponse);
     }
+
+    @PatchMapping("/section/{sectionId}")
+    public Api<String> updateSection(
+            @RequestHeader("Authorization") String authorization,
+            @PathVariable("sectionId") int sectionId,
+            @RequestBody UpdateSectionRequest updateSectionRequest
+    ){
+        sectionService.updateSection(authorization, sectionId, updateSectionRequest);
+        return Api.OK("Updated successfully");
+    }
 }

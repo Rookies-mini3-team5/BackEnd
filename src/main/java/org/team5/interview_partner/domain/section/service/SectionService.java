@@ -15,4 +15,6 @@ public interface SectionService {
     void deleteSection(String authorization, int sectionId);
     // 섹션 조회
     GetSectionInfoResponse getSectionInfo(String authorization, int sectionId);
+    // 섹션 수정(제목, 이력, 강조)
+    void updateSection(String authorization, int sectionId, UpdateSectionRequest updateSectionRequest);
 }
