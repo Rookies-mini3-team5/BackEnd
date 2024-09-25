@@ -1,10 +1,7 @@
 package org.team5.interview_partner.domain.user.service;
 
 import org.springframework.web.multipart.MultipartFile;
-import org.team5.interview_partner.domain.user.dto.JoinRequest;
-import org.team5.interview_partner.domain.user.dto.LoginRequest;
-import org.team5.interview_partner.domain.user.dto.LoginResponse;
-import org.team5.interview_partner.domain.user.dto.UserInfoResponse;
+import org.team5.interview_partner.domain.user.dto.*;
 
 public interface UserService {
     //회원가입
@@ -13,4 +10,6 @@ public interface UserService {
     LoginResponse login(LoginRequest loginRequest);
     // 프로필 조회
     UserInfoResponse getProfile(String authorization);
+    // 프로필 수정
+    void updateProfile(UpdateProfileRequest updateProfileRequest, MultipartFile file, String authorization) throws Exception;
 }
