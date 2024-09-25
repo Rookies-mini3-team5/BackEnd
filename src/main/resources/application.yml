@@ -1,6 +1,6 @@
 spring:
   application:
-    name: map_your_trip_be
+    name: interview_partner_be
   profiles:
     active: dev
   flyway:
