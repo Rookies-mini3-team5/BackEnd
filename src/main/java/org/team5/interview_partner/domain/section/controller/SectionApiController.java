@@ -24,7 +24,7 @@ public class SectionApiController {
     @GetMapping("/section")
     public Api<List<SectionInfoResponse>> sectionInfoList(
             @RequestHeader("Authorization") String authorization
-    ){
+    ) {
         List<SectionInfoResponse> sectionInfoResponseList = sectionService.sectionInfoList(authorization);
         return Api.OK(sectionInfoResponseList);
     }
@@ -33,7 +33,7 @@ public class SectionApiController {
     public Api<AddSectionResponse> addSection(
             @RequestHeader("Authorization") String authorization,
             @RequestBody AddSectionRequest addSectionRequest
-    ){
+    ) {
         AddSectionResponse addSectionResponse = sectionService.addSection(authorization, addSectionRequest);
         return Api.OK(addSectionResponse);
     }
@@ -43,8 +43,17 @@ public class SectionApiController {
             @RequestHeader("Authorization") String authorization,
             @RequestBody(required = false) AddSectionResumeRequest addSectionResumeRequest,
             @PathVariable("sectionId") int sectionId
-            ){
+    ) {
         List<AddSectionResumeResponse> addSectionResumeResponse = sectionService.addSectionResume(authorization, addSectionResumeRequest, sectionId);
         return Api.OK(addSectionResumeResponse);
+    }
+
+    @DeleteMapping("/section/{sectionId}")
+    public Api<String> deleteSection(
+            @RequestHeader("Authorization") String authorization,
+            @PathVariable("sectionId") int sectionId
+    ) {
+        sectionService.deleteSection(authorization, sectionId);
+        return Api.OK("Deleted successfully");
     }
 }

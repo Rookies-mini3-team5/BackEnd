@@ -11,4 +11,6 @@ public interface SectionService {
     AddSectionResponse addSection(String authorization, AddSectionRequest addSectionRequest);
     // 섹션 내 이력 및 경력 생성
     List<AddSectionResumeResponse> addSectionResume(String authorization, AddSectionResumeRequest addSectionResumeRequest, int sectionId);
+    // 섹션 삭제
+    void deleteSection(String authorization, int sectionId);
 }
