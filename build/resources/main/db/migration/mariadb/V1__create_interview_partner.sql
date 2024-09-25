@@ -24,7 +24,7 @@ CREATE TABLE `section` (
     `user_id` integer NOT NULL,
     `job_id` integer NOT NULL,
     `occupational_id` integer NOT NULL,
-    `name` varchar(100),
+    `name` varchar(100) NOT NULL,
     `resume` text,
     `emphasize` text,
     `created_at` datetime NOT NULL,

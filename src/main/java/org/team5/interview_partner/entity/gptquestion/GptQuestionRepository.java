@@ -5,6 +5,6 @@ import org.team5.interview_partner.entity.section.SectionEntity;
 
 import java.util.List;
 
-public interface GptQeustionRepository extends JpaRepository<GptQuestionEntity, Integer> {
+public interface GptQuestionRepository extends JpaRepository<GptQuestionEntity, Integer> {
     List<GptQuestionEntity> findAllBySection(SectionEntity sectionEntity);
 }
