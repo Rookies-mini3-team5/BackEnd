@@ -2,11 +2,15 @@ package org.team5.interview_partner.entity.section;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EntityListeners;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.team5.interview_partner.entity.BaseEntity;
 
 import java.time.LocalDateTime;
@@ -16,6 +20,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @Table(name = "section")
+@EntityListeners(AuditingEntityListener.class)
 public class SectionEntity extends BaseEntity {
     @Column(name = "user_id", nullable = false)
     private Integer userId;
@@ -35,6 +40,11 @@ public class SectionEntity extends BaseEntity {
     @Column(name = "emphasize", columnDefinition = "TEXT")
     private String emphasize;
 
-    @Column(name = "created_at", nullable = false)
+    @CreatedDate
+    @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
+
+    @LastModifiedDate
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt;
 }
