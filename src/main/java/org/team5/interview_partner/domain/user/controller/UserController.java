@@ -1,5 +1,6 @@
 package org.team5.interview_partner.domain.user.controller;
 
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
@@ -11,8 +12,15 @@ import org.team5.interview_partner.common.utils.JwtUtils;
 import org.team5.interview_partner.domain.user.dto.UpdateProfileRequest;
 import org.team5.interview_partner.domain.user.dto.UserInfoResponse;
 import org.team5.interview_partner.domain.user.service.UserService;
+import org.team5.interview_partner.entity.user.UserPictureEntity;
 import org.team5.interview_partner.entity.user.UserPictureRepository;
 import org.team5.interview_partner.entity.user.UserRepository;
+import org.team5.interview_partner.entity.user.UsersEntity;
+
+import java.net.URLEncoder;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 @RestController
 @RequiredArgsConstructor
@@ -45,5 +53,33 @@ public class UserController {
         }
         userService.updateProfile(updateProfileRequest, file, authorization);
         return Api.OK("Profile updated successfully");
+    }
+
+    // 프로필 사진 조회
+    @GetMapping("/mypage/picture")
+    public void downloadUserPicture(
+            @RequestHeader("Authorization") String authorization,
+            HttpServletResponse response
+    ) throws Exception {
+        String token = authorization.substring(7);
+        String username = jwtUtils.getSubjectFromToken(token);
+        UsersEntity user = userRepository.findByUsername(username);
+        UserPictureEntity userPicture = userPictureRepository.findByUserId(user.getId());
+
+        if(userPicture.getFilePath() == null) {
+            throw new ApiException(ErrorCode.BAD_REQUEST, "사진이 없습니다.");
+        }
+
+        Path path = Paths.get(userPicture.getFilePath());
+        byte[] file = Files.readAllBytes(path);
+
+        response.setContentType("apllication/octect-stream");
+        response.setContentLength(file.length);
+        response.setHeader("Content-Disposition", "attachment; fileName=\"" + URLEncoder.encode(userPicture.getOriginalFileName(), "UTF-8") + "\";");
+        response.setHeader("Content-Transfer-Encoding", "binary");
+
+        response.getOutputStream().write(file);
+        response.getOutputStream().flush();
+        response.getOutputStream().close();
     }
 }
