@@ -1,8 +1,8 @@
 spring:
   datasource:
-    url: jdbc:mariadb://${DB_HOST:127.0.0.1}:${DB_PORT:3307}/${DB_DATABASE:interview_partner}
-    username: ${DB_USERNAME:potato}
-    password: ${DB_PASSWORD:potato}
+    url: jdbc:mariadb://${DB_HOST:127.0.0.1}:${DB_PORT:3306}/${DB_DATABASE:interview_partner}
+    username: ${DB_USERNAME:root}
+    password: ${DB_PASSWORD:maria}
     driverClassName: org.mariadb.jdbc.Driver
   jpa:
     show-sql: true
