@@ -28,7 +28,7 @@ CREATE TABLE `section` (
     `resume` text,
     `emphasize` text,
     `created_at` datetime NOT NULL,
-    `updated_at` datetime NOT NULL
+    `updated_at` datetime
 )engine=InnoDB;
 
 CREATE TABLE `gpt_question` (

@@ -7,7 +7,7 @@ import org.team5.interview_partner.common.exception.ApiException;
 import org.team5.interview_partner.domain.gptquestion.dto.GptQuestionListResponse;
 import org.team5.interview_partner.domain.gptquestion.dto.GptQuestionResponse;
 import org.team5.interview_partner.domain.gptquestion.mapper.GptQuestionMapper;
-import org.team5.interview_partner.entity.gptquestion.GptQeustionRepository;
+import org.team5.interview_partner.entity.gptquestion.GptQuestionRepository;
 import org.team5.interview_partner.entity.gptquestion.GptQuestionEntity;
 import org.team5.interview_partner.entity.section.SectionEntity;
 import org.team5.interview_partner.entity.section.SectionRepository;
@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class GptQuestionServiceImpl implements GptQuestionService{
-    private final GptQeustionRepository gptQeustionRepository;
+    private final GptQuestionRepository gptQeustionRepository;
     private final SectionRepository sectionRepository;
     @Override
     public GptQuestionListResponse gptQuestionList(int sectionId) {
