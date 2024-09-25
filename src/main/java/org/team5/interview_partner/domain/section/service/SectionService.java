@@ -13,4 +13,6 @@ public interface SectionService {
     List<AddSectionResumeResponse> addSectionResume(String authorization, AddSectionResumeRequest addSectionResumeRequest, int sectionId);
     // 섹션 삭제
     void deleteSection(String authorization, int sectionId);
+    // 섹션 조회
+    GetSectionInfoResponse getSectionInfo(String authorization, int sectionId);
 }
