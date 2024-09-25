@@ -2,6 +2,8 @@ spring:
   application:
     name: map_your_trip_be
   profiles:
+    group:
+      dev: dev, api
     active: dev
   flyway:
     location: classpath:/db/migration/{vendor}
