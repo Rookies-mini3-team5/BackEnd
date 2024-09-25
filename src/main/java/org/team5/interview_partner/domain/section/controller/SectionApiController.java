@@ -1,14 +1,11 @@
 package org.team5.interview_partner.domain.section.controller;
 
-import jakarta.persistence.criteria.CriteriaBuilder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 import org.team5.interview_partner.common.api.Api;
-import org.team5.interview_partner.common.utils.JwtUtils;
 import org.team5.interview_partner.domain.section.dto.*;
 import org.team5.interview_partner.domain.section.service.SectionService;
-import org.team5.interview_partner.entity.user.UserRepository;
 
 import java.util.List;
 
@@ -18,9 +15,8 @@ import java.util.List;
 @Slf4j
 public class SectionApiController {
     private final SectionService sectionService;
-    private final JwtUtils jwtUtils;
-    private final UserRepository userRepository;
 
+    // section 목록 조회
     @GetMapping("/section")
     public Api<List<SectionInfoResponse>> sectionInfoList(
             @RequestHeader("Authorization") String authorization
@@ -55,5 +51,14 @@ public class SectionApiController {
     ) {
         sectionService.deleteSection(authorization, sectionId);
         return Api.OK("Deleted successfully");
+    }
+
+    @GetMapping("/section/{sectionId}")
+    public Api<GetSectionInfoResponse> getSectionInfo(
+            @RequestHeader("Authorization") String authorization,
+            @PathVariable("sectionId") int sectionId
+    ){
+        GetSectionInfoResponse getSectionInfoResponse = sectionService.getSectionInfo(authorization, sectionId);
+        return Api.OK(getSectionInfoResponse);
     }
 }

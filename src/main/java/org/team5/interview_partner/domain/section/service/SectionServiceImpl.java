@@ -158,4 +158,31 @@ public class SectionServiceImpl implements SectionService {
             throw new ApiException(ErrorCode.BAD_REQUEST);
         }
     }
+
+    @Override
+    public GetSectionInfoResponse getSectionInfo(String authorization, int sectionId) {
+        // 유저 정보 추출
+        String token = authorization.substring(7);
+        String username = jwtUtils.getSubjectFromToken(token);
+        UsersEntity user = userRepository.findByUsername(username);
+
+        Optional<SectionEntity> section = sectionRepository.findById(sectionId);
+        if(section.isPresent()){
+            SectionEntity sectionEntity = section.get();
+            if(user != sectionEntity.getUser()){
+                throw new ApiException(ErrorCode.UNAUTHORIZED, "권한이 없습니다.");
+            }
+
+            return GetSectionInfoResponse.builder()
+                    .sectionId(sectionId)
+                    .sectionName(sectionEntity.getName())
+                    .occupational(sectionEntity.getOccupational().getOccupationalName())
+                    .job(sectionEntity.getJob().getJobName())
+                    .resume(sectionEntity.getResume())
+                    .emphasize(sectionEntity.getEmphasize())
+                    .build();
+        } else{
+            throw new ApiException(ErrorCode.BAD_REQUEST);
+        }
+    }
 }
