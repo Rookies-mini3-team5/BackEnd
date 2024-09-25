@@ -185,4 +185,35 @@ public class SectionServiceImpl implements SectionService {
             throw new ApiException(ErrorCode.BAD_REQUEST);
         }
     }
+
+    @Override
+    public void updateSection(String authorization, int sectionId, UpdateSectionRequest updateSectionRequest) {
+        // 유저 정보 추출
+        String token = authorization.substring(7);
+        String username = jwtUtils.getSubjectFromToken(token);
+        UsersEntity user = userRepository.findByUsername(username);
+
+        Optional<SectionEntity> section = sectionRepository.findById(sectionId);
+        if(section.isPresent()){
+            SectionEntity sectionEntity = section.get();
+            if(user != sectionEntity.getUser()){
+                throw new ApiException(ErrorCode.UNAUTHORIZED, "권한이 없습니다.");
+            }
+
+            if(updateSectionRequest.getName() != null){
+                sectionEntity.setName(updateSectionRequest.getName());
+            }
+            if(updateSectionRequest.getEmphasize() != null){
+                sectionEntity.setEmphasize(updateSectionRequest.getEmphasize());
+            }
+            if(updateSectionRequest.getResume() != null){
+                sectionEntity.setResume(updateSectionRequest.getResume());
+            }
+
+            sectionRepository.save(sectionEntity);
+
+        } else{
+            throw new ApiException(ErrorCode.BAD_REQUEST);
+        }
+    }
 }
