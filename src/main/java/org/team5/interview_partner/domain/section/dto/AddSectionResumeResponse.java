@@ -6,6 +6,7 @@ import lombok.Data;
 @Data
 @Builder
 public class AddSectionResumeResponse {
+    private int questionId;
     private String expectedQuestion;
     private String answerGuide;
 }

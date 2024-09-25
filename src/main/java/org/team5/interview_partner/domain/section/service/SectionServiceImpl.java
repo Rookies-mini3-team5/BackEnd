@@ -117,16 +117,17 @@ public class SectionServiceImpl implements SectionService {
                     answerGuide = questionList.get(i + 1).trim(); // Get the answer guide
                 }
 
+                GptQuestionEntity gptQuestionEntity = GptQuestionMapper.toEntity(savedSection, expectedQuestion, answerGuide);
+                GptQuestionEntity savedGptQuestionEntity = gptQuestionRepository.save(gptQuestionEntity);
+
                 // Create an AddSectionResumeResponse object and add it to the list
                 AddSectionResumeResponse response = AddSectionResumeResponse.builder()
+                        .questionId(savedGptQuestionEntity.getId())
                         .expectedQuestion(expectedQuestion)
                         .answerGuide(answerGuide)
                         .build();
 
                 addSectionResume.add(response);
-
-                GptQuestionEntity gptQuestionEntity = GptQuestionMapper.toEntity(savedSection, expectedQuestion, answerGuide);
-                gptQuestionRepository.save(gptQuestionEntity);
             }
 
             return addSectionResume;
