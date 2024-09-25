@@ -2,7 +2,7 @@ spring:
   application:
     name: map_your_trip_be
   profiles:
-    active: dev
+    active: prod
   flyway:
     location: classpath:/db/migration/{vendor}
     baselineOnMigrate: true
