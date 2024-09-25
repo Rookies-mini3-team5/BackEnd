@@ -36,7 +36,7 @@ public class SectionEntity extends BaseEntity {
     @JoinColumn(name = "occupational_id", nullable = false)
     private OccupationalEntity occupational;
 
-    @Column(name = "name", nullable = false, length = 100)
+    @Column(name = "name", length = 100)
     private String name;
 
     @Column(name = "resume", columnDefinition = "TEXT")

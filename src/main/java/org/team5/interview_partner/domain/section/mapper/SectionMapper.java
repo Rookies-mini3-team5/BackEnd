@@ -1,7 +1,13 @@
 package org.team5.interview_partner.domain.section.mapper;
 
+import org.team5.interview_partner.domain.section.dto.AddSectionRequest;
 import org.team5.interview_partner.domain.section.dto.SectionInfoResponse;
+import org.team5.interview_partner.entity.job.JobEntity;
+import org.team5.interview_partner.entity.occupational.OccupationalEntity;
 import org.team5.interview_partner.entity.section.SectionEntity;
+import org.team5.interview_partner.entity.user.UsersEntity;
+
+import java.util.Optional;
 
 public class SectionMapper {
 
@@ -14,6 +20,14 @@ public class SectionMapper {
                 .occupational(section.getOccupational().getOccupationalName())
                 .createdAt(section.getCreatedAt())
                 .updatedAt(section.getUpdatedAt())
+                .build();
+    }
+
+    public static SectionEntity toEntity(UsersEntity user, JobEntity job, OccupationalEntity occupational){
+        return SectionEntity.builder()
+                .user(user)
+                .job(job)
+                .occupational(occupational)
                 .build();
     }
 }
