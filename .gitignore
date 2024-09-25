@@ -5,7 +5,7 @@ src/main/resources/application-dev.yml
 !gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**/build/
 !**/src/test/**/build/
-./src/**/application-api.yml
+
 ./src/**/test
 ### STS ###
 .apt_generated
@@ -20,6 +20,7 @@ bin/
 !**/src/test/**/bin/
 
 ### IntelliJ IDEA ###
+application-api.yml
 .idea
 *.iws
 *.iml
