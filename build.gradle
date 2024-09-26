@@ -49,5 +49,12 @@ tasks.named('test') {
 }
 
 jar {
-    enabled = false
+    archiveBaseName = 'interview_partner-0.0.1-SNAPSHOT'
+    archiveVersion = ''
+}
+
+bootJar {
+    archiveBaseName = 'interview_partner-0.0.1-SNAPSHOT'
+    archiveVersion = ''  // 버전 정보 제거
+    archiveClassifier = ''  // plain JAR가 아닌 동일한 이름으로 생성
 }
