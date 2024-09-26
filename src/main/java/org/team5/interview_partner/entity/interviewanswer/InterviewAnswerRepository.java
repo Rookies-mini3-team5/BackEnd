@@ -7,4 +7,5 @@ import java.util.List;
 
 public interface InterviewAnswerRepository extends JpaRepository<InterviewAnswerEntity,Integer> {
     List<InterviewAnswerEntity> findAllByGptQuestion(GptQuestionEntity gptQuestionEntity);
+    void deleteByGptQuestion_Section_Id(int sectionId);
 }
