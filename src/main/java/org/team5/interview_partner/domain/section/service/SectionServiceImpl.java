@@ -2,6 +2,7 @@ package org.team5.interview_partner.domain.section.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.team5.interview_partner.common.error.ErrorCode;
 import org.team5.interview_partner.common.exception.ApiException;
 import org.team5.interview_partner.common.utils.JwtUtils;
@@ -27,6 +28,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+@Transactional
 @Service
 @RequiredArgsConstructor
 public class SectionServiceImpl implements SectionService {
