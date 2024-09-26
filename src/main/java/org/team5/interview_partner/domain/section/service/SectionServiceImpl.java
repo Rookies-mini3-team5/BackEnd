@@ -68,7 +68,7 @@ public class SectionServiceImpl implements SectionService {
 
         Optional<JobEntity> job = jobRepository.findById(addSectionRequest.getJob());
         Optional<OccupationalEntity> occupational = occupationalRepository.findById(addSectionRequest.getOccupational());
-        if(job.isPresent() && occupational.isPresent()){
+        if (job.isPresent() && occupational.isPresent()) {
             JobEntity jobEntity = job.get();
             OccupationalEntity occupationalEntity = occupational.get();
 
@@ -95,16 +95,16 @@ public class SectionServiceImpl implements SectionService {
         UsersEntity user = userRepository.findByUsername(username);
 
         Optional<SectionEntity> section = sectionRepository.findById(sectionId);
-        if(section.isPresent()){
+        if (section.isPresent()) {
             SectionEntity sectionEntity = section.get();
-            if(user != sectionEntity.getUser()){
+            if (user != sectionEntity.getUser()) {
                 throw new ApiException(ErrorCode.UNAUTHORIZED, "권한이 없습니다.");
             }
 
-            if(addSectionResumeRequest.getResume() != null){
+            if (addSectionResumeRequest.getResume() != null) {
                 sectionEntity.setResume(addSectionResumeRequest.getResume());
             }
-            if(addSectionResumeRequest.getEmphasize() != null){
+            if (addSectionResumeRequest.getEmphasize() != null) {
                 sectionEntity.setEmphasize(addSectionResumeRequest.getEmphasize());
             }
 
@@ -139,7 +139,7 @@ public class SectionServiceImpl implements SectionService {
             }
 
             return addSectionResume;
-        } else{
+        } else {
             throw new ApiException(ErrorCode.BAD_REQUEST, "유효하지 않은 sectionId");
         }
     }
@@ -152,13 +152,13 @@ public class SectionServiceImpl implements SectionService {
         UsersEntity user = userRepository.findByUsername(username);
 
         Optional<SectionEntity> section = sectionRepository.findById(sectionId);
-        if(section.isPresent()){
+        if (section.isPresent()) {
             SectionEntity sectionEntity = section.get();
-            if(user != sectionEntity.getUser()){
+            if (user != sectionEntity.getUser()) {
                 throw new ApiException(ErrorCode.UNAUTHORIZED, "권한이 없습니다.");
             }
             sectionRepository.delete(sectionEntity);
-        } else{
+        } else {
             throw new ApiException(ErrorCode.BAD_REQUEST);
         }
     }
@@ -171,9 +171,9 @@ public class SectionServiceImpl implements SectionService {
         UsersEntity user = userRepository.findByUsername(username);
 
         Optional<SectionEntity> section = sectionRepository.findById(sectionId);
-        if(section.isPresent()){
+        if (section.isPresent()) {
             SectionEntity sectionEntity = section.get();
-            if(user != sectionEntity.getUser()){
+            if (user != sectionEntity.getUser()) {
                 throw new ApiException(ErrorCode.UNAUTHORIZED, "권한이 없습니다.");
             }
 
@@ -185,7 +185,7 @@ public class SectionServiceImpl implements SectionService {
                     .resume(sectionEntity.getResume())
                     .emphasize(sectionEntity.getEmphasize())
                     .build();
-        } else{
+        } else {
             throw new ApiException(ErrorCode.BAD_REQUEST);
         }
     }

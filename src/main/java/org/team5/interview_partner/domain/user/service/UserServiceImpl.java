@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import org.team5.interview_partner.common.error.ErrorCode;
 import org.team5.interview_partner.common.exception.ApiException;
@@ -17,14 +18,15 @@ import org.team5.interview_partner.entity.user.UserRepository;
 import org.team5.interview_partner.entity.user.UsersEntity;
 import org.team5.interview_partner.entity.user.enums.Role;
 
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
+@Transactional
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
@@ -62,21 +64,25 @@ public class UserServiceImpl implements UserService {
         String originalFileName;
         String fileSize;
 
-        if (file != null && !file.isEmpty()) {
-            // Store the uploaded file
-            storedFilePath = fileUtils.storeFile(file, user.getUsername());
+        try {
+            if (file != null && !file.isEmpty()) {
+                // Store the uploaded file
+                storedFilePath = fileUtils.storeFile(file, user.getUsername());
 
-            originalFileName = file.getOriginalFilename();
-            fileSize = String.valueOf(file.getSize());
-        } else {
-            // Use default picture
-            storedFilePath = Paths.get(uploadPath, "defaultPicture.jpg").toString();
-            originalFileName = "defaultPicture.jpg";
+                originalFileName = file.getOriginalFilename();
+                fileSize = String.valueOf(file.getSize());
+            } else {
+                // Use default picture
+                storedFilePath = Paths.get(uploadPath, "defaultPicture.jpg").toString();
+                originalFileName = "defaultPicture.jpg";
 
-            // Get the file size of the default picture
-            Path defaultPicturePath = Paths.get(storedFilePath);
-            long defaultFileSize = Files.size(defaultPicturePath);
-            fileSize = String.valueOf(defaultFileSize);
+                // Get the file size of the default picture
+                Path defaultPicturePath = Paths.get(storedFilePath);
+                long defaultFileSize = Files.size(defaultPicturePath);
+                fileSize = String.valueOf(defaultFileSize);
+            }
+        } catch (IOException e) {
+            throw new ApiException(ErrorCode.SERVER_ERROR, "파일 저장 실패");
         }
 
         // 3. Save the UserPictureEntity
@@ -131,12 +137,12 @@ public class UserServiceImpl implements UserService {
         String username = jwtUtils.getSubjectFromToken(token);
         UsersEntity user = userRepository.findByUsername(username);
 
-        if(updateProfileRequest != null) {
+        if (updateProfileRequest != null) {
             if (updateProfileRequest.getName() != null) {
                 user.setName(updateProfileRequest.getName());
             }
 
-            if (updateProfileRequest.getEmail() != null){
+            if (updateProfileRequest.getEmail() != null) {
                 user.setEmail(updateProfileRequest.getEmail());
             }
 
@@ -149,7 +155,7 @@ public class UserServiceImpl implements UserService {
             UserPictureEntity userPicture = userPictureRepository.findByUserId(user.getId());
 
             // 회원가입 시 프사가 설정되므로 기본 프사가 아닐 시 삭제 후 작업
-            if(!Objects.equals(userPicture.getFilePath(), Paths.get(uploadPath, "defaultPicture.jpg").toString())) {
+            if (!Objects.equals(userPicture.getFilePath(), Paths.get(uploadPath, "defaultPicture.jpg").toString())) {
                 fileUtils.deleteFile(userPicture.getFilePath());
             }
 
