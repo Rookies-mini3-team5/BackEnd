@@ -15,7 +15,7 @@ import org.team5.interview_partner.domain.job.service.JobService;
 @RequestMapping("/open-api/occupational")
 public class JobOpenApiController {
     private final JobService jobService;
-    @GetMapping("/")
+    @GetMapping("")
     public Api<OccupationalListResponse> occupationalInfoList(){
         OccupationalListResponse occupationalListResponse = jobService.occupationalInfoList();
         return Api.OK(occupationalListResponse);
