@@ -235,8 +235,8 @@ public class SectionServiceImpl implements SectionService {
             // Handle 'resume' changes
             if (resumeChanged) {
                 // Delete all existing GPT questions associated with the section
-                gptQuestionRepository.deleteBySectionId(sectionId);
                 interviewAnswerRepository.deleteByGptQuestion_Section_Id(sectionId);
+                gptQuestionRepository.deleteBySectionId(sectionId);
 
                 // Generate new GPT questions and answer guides
                 List<String> questionList = gptApiService.expectedQuestion(sectionId);
