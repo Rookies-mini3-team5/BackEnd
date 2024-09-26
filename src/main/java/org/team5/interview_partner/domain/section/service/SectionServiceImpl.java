@@ -11,6 +11,7 @@ import org.team5.interview_partner.domain.section.dto.*;
 import org.team5.interview_partner.domain.section.mapper.SectionMapper;
 import org.team5.interview_partner.entity.gptquestion.GptQuestionEntity;
 import org.team5.interview_partner.entity.gptquestion.GptQuestionRepository;
+import org.team5.interview_partner.entity.interviewanswer.InterviewAnswerRepository;
 import org.team5.interview_partner.entity.job.JobEntity;
 import org.team5.interview_partner.entity.job.JobRepository;
 import org.team5.interview_partner.entity.occupational.OccupationalEntity;
@@ -36,6 +37,7 @@ public class SectionServiceImpl implements SectionService {
     private final OccupationalRepository occupationalRepository;
     private final GptApiService gptApiService;
     private final GptQuestionRepository gptQuestionRepository;
+    private final InterviewAnswerRepository interviewAnswerRepository;
 
     // DateTimeFormatter를 통해 YYMMDD 형식으로 포맷
     private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyMMdd");
@@ -188,32 +190,92 @@ public class SectionServiceImpl implements SectionService {
 
     @Override
     public void updateSection(String authorization, int sectionId, UpdateSectionRequest updateSectionRequest) {
-        // 유저 정보 추출
+        // Extract user information
         String token = authorization.substring(7);
         String username = jwtUtils.getSubjectFromToken(token);
         UsersEntity user = userRepository.findByUsername(username);
 
+        // Fetch the section
         Optional<SectionEntity> section = sectionRepository.findById(sectionId);
-        if(section.isPresent()){
+        if (section.isPresent()) {
             SectionEntity sectionEntity = section.get();
-            if(user != sectionEntity.getUser()){
+
+            // Check if the user owns the section
+            if (!user.equals(sectionEntity.getUser())) {
                 throw new ApiException(ErrorCode.UNAUTHORIZED, "권한이 없습니다.");
             }
 
-            if(updateSectionRequest.getName() != null){
+            boolean resumeChanged = false;
+            boolean emphasizeChanged = false;
+
+            // Check for changes in 'resume'
+            if (updateSectionRequest.getResume() != null &&
+                    !updateSectionRequest.getResume().equals(sectionEntity.getResume())) {
+                sectionEntity.setResume(updateSectionRequest.getResume());
+                resumeChanged = true;
+            }
+
+            // Check for changes in 'emphasize'
+            if (updateSectionRequest.getEmphasize() != null &&
+                    !updateSectionRequest.getEmphasize().equals(sectionEntity.getEmphasize())) {
+                sectionEntity.setEmphasize(updateSectionRequest.getEmphasize());
+                emphasizeChanged = true;
+            }
+
+            // Update 'name' if provided
+            if (updateSectionRequest.getName() != null) {
                 sectionEntity.setName(updateSectionRequest.getName());
             }
-            if(updateSectionRequest.getEmphasize() != null){
-                sectionEntity.setEmphasize(updateSectionRequest.getEmphasize());
-            }
-            if(updateSectionRequest.getResume() != null){
-                sectionEntity.setResume(updateSectionRequest.getResume());
+
+            // Save the updated section
+            SectionEntity savedSection = sectionRepository.save(sectionEntity);
+
+            // Handle 'resume' changes
+            if (resumeChanged) {
+                // Delete all existing GPT questions associated with the section
+                gptQuestionRepository.deleteBySectionId(sectionId);
+                interviewAnswerRepository.deleteByGptQuestion_Section_Id(sectionId);
+
+                // Generate new GPT questions and answer guides
+                List<String> questionList = gptApiService.expectedQuestion(sectionId);
+
+                // Save the new GPT questions
+                for (int i = 0; i < questionList.size(); i += 2) {
+                    String expectedQuestion = questionList.get(i).trim(); // Get the question
+                    String answerGuide = "";
+
+                    // Check if the answer guide exists at the next index
+                    if (i + 1 < questionList.size()) {
+                        answerGuide = questionList.get(i + 1).trim(); // Get the answer guide
+                    }
+
+                    GptQuestionEntity gptQuestionEntity = GptQuestionMapper.toEntity(sectionEntity, expectedQuestion, answerGuide);
+                    gptQuestionRepository.save(gptQuestionEntity);
+                }
+            } else if (emphasizeChanged) {
+                // Handle 'emphasize' changes
+                // Fetch existing GPT questions
+                List<GptQuestionEntity> gptQuestions = gptQuestionRepository.findAllBySection(savedSection);
+
+                // Extract the questions
+                List<String> questions = gptQuestions.stream()
+                        .map(GptQuestionEntity::getQuestion)
+                        .collect(Collectors.toList());
+
+                // Regenerate answer guides based on new 'emphasize'
+                List<String> newAnswerGuides = gptApiService.regenerateAnswerGuides(sectionId, questions);
+
+                // Update GPT questions with new answer guides
+                for (int i = 0; i < gptQuestions.size(); i++) {
+                    GptQuestionEntity gptQuestion = gptQuestions.get(i);
+                    String newAnswerGuide = newAnswerGuides.get(i);
+                    gptQuestion.setAnswerGuide(newAnswerGuide);
+                    gptQuestionRepository.save(gptQuestion);
+                }
             }
 
-            sectionRepository.save(sectionEntity);
-
-        } else{
-            throw new ApiException(ErrorCode.BAD_REQUEST);
+        } else {
+            throw new ApiException(ErrorCode.BAD_REQUEST, "유효하지 않은 sectionId");
         }
     }
 }
