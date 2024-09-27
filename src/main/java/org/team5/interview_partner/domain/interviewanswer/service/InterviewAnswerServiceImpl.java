@@ -27,7 +27,7 @@ public class InterviewAnswerServiceImpl implements InterviewAnswerService{
     @Override
     public void addInterviewAnswer(int gptQuestionId, InterviewAnswerRequest interviewAnswerRequest) {
         GptQuestionEntity gptQuestionEntity = gptQeustionRepository.findById(gptQuestionId)
-                .orElseThrow(()->new ApiException(ErrorCode.BAD_REQUEST,"gpt question id에 해당한는 값이 없습니다."));
+                .orElseThrow(()->new ApiException(ErrorCode.BAD_REQUEST,"gpt question id에 해당하는 값이 없습니다."));
         InterviewAnswerEntity interviewAnswerEntity = InterviewAnswerMapper.toEntity(interviewAnswerRequest);
 
         //GPT
@@ -43,7 +43,7 @@ public class InterviewAnswerServiceImpl implements InterviewAnswerService{
     @Override
     public InterviewAnswerListResponse interviewAnswerList(int gptQuestionId) {
         GptQuestionEntity gptQuestionEntity = gptQeustionRepository.findById(gptQuestionId)
-                .orElseThrow(()->new ApiException(ErrorCode.BAD_REQUEST,"gpt question id에 해당한느 값이 없습니다."));
+                .orElseThrow(()->new ApiException(ErrorCode.BAD_REQUEST,"gpt question id에 해당하는 값이 없습니다."));
 
         List<InterviewAnswerEntity> interviewAnswerEntityList = interviewAnswerRepository.findAllByGptQuestion(gptQuestionEntity);
 
