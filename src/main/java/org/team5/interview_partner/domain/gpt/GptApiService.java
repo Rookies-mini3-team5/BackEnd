@@ -18,14 +18,12 @@ import org.team5.interview_partner.entity.job.JobEntity;
 import org.team5.interview_partner.entity.job.JobRepository;
 import org.team5.interview_partner.entity.section.SectionEntity;
 import org.team5.interview_partner.entity.section.SectionRepository;
-import org.team5.interview_partner.entity.user.UsersEntity;
 import org.team5.interview_partner.entity.userquestion.UserQuestionEntity;
 import org.team5.interview_partner.entity.userquestion.UserQuestionRepository;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @Slf4j
