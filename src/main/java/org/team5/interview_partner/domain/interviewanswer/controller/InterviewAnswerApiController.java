@@ -13,20 +13,20 @@ import org.team5.interview_partner.domain.interviewanswer.service.InterviewAnswe
 public class InterviewAnswerApiController {
     private final InterviewAnswerService interviewAnswerService;
 
-    @PostMapping("/{gptQeustionId}")
+    @PostMapping("/{gptQuestionId}")
     public Api addInterviewAnswer(
-            @PathVariable("gptQeustionId") int gptQuestionId,
+            @PathVariable("gptQuestionId") int gptQuestionId,
             @RequestBody InterviewAnswerRequest interviewAnswerRequest
     ){
         interviewAnswerService.addInterviewAnswer(gptQuestionId,interviewAnswerRequest);
         return Api.CREATE();
     }
 
-    @GetMapping("/list/{gptQeustionId}")
+    @GetMapping("/list/{gptQuestionId}")
     public Api<InterviewAnswerListResponse> interviewAnswerList(
-            @PathVariable("gptQeustionId") int gptQeustionId
+            @PathVariable("gptQuestionId") int gptQuestionId
     ){
-        InterviewAnswerListResponse interviewAnswerListResponse = interviewAnswerService.interviewAnswerList(gptQeustionId);
+        InterviewAnswerListResponse interviewAnswerListResponse = interviewAnswerService.interviewAnswerList(gptQuestionId);
         return Api.OK(interviewAnswerListResponse);
     }
 

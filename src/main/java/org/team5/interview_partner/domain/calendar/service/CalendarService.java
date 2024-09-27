@@ -9,5 +9,8 @@ public interface CalendarService {
 
     CalendarListResponse calendarList(Authentication authentication, String year, String month);
 
+    void calendarModify(Authentication authentication, CalendarRequest calendarRequest, int calendarId);
+
+    void deleteCalendarMemo(Authentication authentication,int calendarId);
 
 }

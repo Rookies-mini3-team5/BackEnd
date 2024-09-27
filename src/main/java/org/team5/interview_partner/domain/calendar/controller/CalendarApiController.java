@@ -37,4 +37,24 @@ public class CalendarApiController {
     }
 
     //메모 수정
+    @PatchMapping("/{calendarId}")
+    public Api calendarModify(
+            @RequestBody
+            CalendarRequest calendarRequest,
+            Authentication authentication,
+            @PathVariable(name = "calendarId")
+            int calendarId
+    ){
+        calendarService.calendarModify(authentication,calendarRequest, calendarId);
+        return Api.OK("SUCCESS");
+    }
+    @DeleteMapping("/{calendarId}")
+    public Api deleteCalendarMemo(
+            Authentication authentication,
+            @PathVariable(name = "calendarId")
+            int calendarId
+    ){
+        calendarService.deleteCalendarMemo(authentication, calendarId);
+        return Api.OK("SUCCESS");
+    }
 }
