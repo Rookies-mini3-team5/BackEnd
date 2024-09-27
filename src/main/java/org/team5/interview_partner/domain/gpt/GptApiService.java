@@ -65,13 +65,13 @@ public class GptApiService {
         messageList.add(gpt);
 
         //이력 및 강조점 추가
-        if (!sectionEntity.getResume().isEmpty() && !sectionEntity.getEmphasize().isEmpty()) {
+        if (sectionEntity.getResume() != null && sectionEntity.getEmphasize() != null) {
             fineTuning = "나는 " + sectionEntity.getResume() + " 한 이력이 있고 " + sectionEntity.getEmphasize() + " 한 점을 강조하고 싶다.";
             fineTuning_answer = sectionEntity.getResume() + "한 이력과 " + sectionEntity.getEmphasize() + " 한 점을 강조 하고 싶으시군요. 참고해서 추후 대답에 적용하겠습니다.";
-        } else if (!sectionEntity.getResume().isEmpty()) {
+        } else if (sectionEntity.getResume() != null) {
             fineTuning = "나는 " + sectionEntity.getResume() + " 한 이력이 있어";
             fineTuning_answer = sectionEntity.getResume() + "한 이력이 있으시군요. 참고해서 추후 대답에 적용하겠습니다.";
-        } else if (!sectionEntity.getEmphasize().isEmpty()) {
+        } else if (sectionEntity.getEmphasize() != null) {
             fineTuning = "나는 " + sectionEntity.getEmphasize() + " 한 점을 강조하고 싶다.";
             fineTuning_answer = sectionEntity.getEmphasize() + " 한 점을 강조 하고 싶으시군요. 참고해서 추후 대답에 적용하겠습니다.";
         }
@@ -189,7 +189,7 @@ public class GptApiService {
         StringBuilder promptBuilder = new StringBuilder();
         promptBuilder.append("주어지는 면접 질문들에 대한 답변 가이드를 제공할 것입니다. ");
         promptBuilder.append("각 질문에 대해 어떻게 답변해야 하는지에 대한 답변 가이드를 제공해 주세요. 답변 예시가 아닌 가이드입니다. ");
-        promptBuilder.append("사용자가 강조하고 싶은 점과 이력을 반영해서 답변 가이드를 만들어 주세요.\n\n");
+        promptBuilder.append("사용자가 강조하고 싶은 점과 이력이 있다면 반영해서 답변 가이드를 만들어 주세요.\n\n");
 
         // Append the questions
         for (int i = 0; i < questions.size(); i++) {
