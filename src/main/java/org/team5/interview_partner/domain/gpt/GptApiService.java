@@ -181,6 +181,7 @@ public class GptApiService {
     }
 
     // 강조점 수정 시 답변 가이드 재생성
+    // 수정 필요
     public List<String> regenerateAnswerGuides(int sectionId, List<String> questions) {
 
         List<Message> messageList = fineTuning(sectionId);
