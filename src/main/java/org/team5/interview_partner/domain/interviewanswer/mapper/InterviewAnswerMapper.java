@@ -6,6 +6,7 @@ import org.team5.interview_partner.domain.interviewanswer.dto.InterviewAnswerReq
 import org.team5.interview_partner.domain.interviewanswer.dto.InterviewAnswerResponse;
 import org.team5.interview_partner.entity.interviewanswer.InterviewAnswerEntity;
 
+import java.util.List;
 import java.util.Optional;
 
 public class InterviewAnswerMapper {
@@ -21,10 +22,12 @@ public class InterviewAnswerMapper {
     public static InterviewAnswerResponse toResponse(InterviewAnswerEntity interviewAnswerEntity){
         return Optional.ofNullable(interviewAnswerEntity)
                 .map(it->{
+                    String feedback = interviewAnswerEntity.getFeedback().replace("\n","");
+                    List<String> feedBackList = List.of(feedback.split("/"));
                     return InterviewAnswerResponse.builder()
                             .answer(interviewAnswerEntity.getAnswer())
                             .id(interviewAnswerEntity.getId())
-                            .feedback(interviewAnswerEntity.getFeedback())
+                            .feedbackList(feedBackList)
                             .gptQuestionId(interviewAnswerEntity.getGptQuestion().getId())
                             .build();
                 }).orElseThrow(()->new ApiException(ErrorCode.BAD_REQUEST));

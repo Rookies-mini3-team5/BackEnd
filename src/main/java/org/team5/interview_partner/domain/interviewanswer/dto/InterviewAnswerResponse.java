@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Data;
 import org.team5.interview_partner.entity.gptquestion.GptQuestionEntity;
 
+import java.util.List;
+
 @Data
 @Builder
 public class InterviewAnswerResponse {
@@ -14,5 +16,5 @@ public class InterviewAnswerResponse {
 
     private String answer;
 
-    private String feedback;
+    private List<String> feedbackList;
 }
