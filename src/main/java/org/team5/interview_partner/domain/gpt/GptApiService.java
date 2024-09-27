@@ -161,14 +161,16 @@ public class GptApiService {
 
 
         if (interviewAnswerEntities.isEmpty()) {
-            fineTuning = "이제 \"" + gptQuestionEntity.getQuestion() + "\"에 대해 대답을 할게 내가 대답한 후에 내가 잘 대답했는지 피드백 해줘";
-            fineTuning_answer = "네 알겠습니다. 면접 질문에 대한 대답을 피드백 해드리겠습니다.";
+            fineTuning = "이제 \"" + gptQuestionEntity.getQuestion() + "\"에 대해 대답을 할게 내가 대답한 후에 내가 잘 대답했는지 피드백 해줘" +
+                    " 대답 예시는 " +
+                    "1. 면접 대답에 대한 피드백/2. 면접 대답에 대한 피드백/3. 면접 대답에 대한 피드백/4. 면접 대답에 대한 피드백/5. 면접 대답에 대한 피드백/6. 면접 대답에 대한 피드백/  이렇게 질문 뒤에 /, 질문에 대한 답변 가이드 뒤에 /로 구분하고 문자열을 6개의 문장을 자를거라 1부터 6까지의 답변만 만들어주세요 문장에 줄바꿈은 필요 없습니다.";
+            fineTuning_answer = "네 알겠습니다. 대답 예시를 참고하여 면접 질문에 대한 대답을 피드백 해드리겠습니다.";
             Message user = new Message("user", fineTuning);
             Message gpt = new Message("system", fineTuning_answer);
             messageList.add(user);
             messageList.add(gpt);
         }
-
+        answer = answer+" 대답 예시는 1. 면접 대답에 대한 피드백/2. /3. /4. /5. /6.   이렇게 질문 뒤에 / 질문에 대한 답변 가이드 뒤에 /로 구분하고 줄바꿈이 없는 문자열로 만들어주세요. 문자열을 6개의 문장을 자를거라 1부터 6까지의 답변만 만들어주세요  이전에 해준 피드백중 장점들은 최대한 적게 말해주세요.";
         Message userAnswer = new Message("user", answer);
         messageList.add(userAnswer);
         GptRequest gptRequest = GptRequest.builder()
