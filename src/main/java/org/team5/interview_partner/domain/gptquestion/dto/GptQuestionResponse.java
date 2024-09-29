@@ -7,6 +7,8 @@ import lombok.Builder;
 import lombok.Data;
 import org.team5.interview_partner.entity.section.SectionEntity;
 
+import java.util.List;
+
 @Data
 @Builder
 public class GptQuestionResponse {
@@ -16,5 +18,5 @@ public class GptQuestionResponse {
 
     private String question;
 
-    private String answerGuide;
+    private List<String> answerGuide;
 }

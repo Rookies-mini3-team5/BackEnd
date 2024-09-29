@@ -88,9 +88,13 @@ public class GptApiService {
     public List<String> expectedQuestion(int sectionId) {
 
         List<Message> messageList = fineTuning(sectionId);
-        String fineTuning = "당신은 이제 면접 예상질문을 생성할 것 입니다. 면접 예상 질문과 질문에 대해 어떻게 답변해야 하는지에 대한 예시 답변 가이드를 함께 제공해 주세요. 면접 예상 질문을 생성할 때에는 사용자가 강조하고 싶은 점이 있어도 질문에 반영하지 마세요." +
+        String fineTuning = "당신은 이제 면접 예상질문을 생성할 것 입니다. 면접 예상 질문과 질문에 대해 어떻게 답변해야 하는지에 대한 답변 가이드를 함께 제공해 주세요. 면접 예상 질문을 생성할 때에는 사용자가 강조하고 싶은 점이 있어도 질문에 반영하지 마세요." +
                 "\n" +
-                "    1. 질문/질문에 대한 답변 가이드/2. 질문/질문에 대한 답변 가이드/3. 질문/질문에 대한 답변 가이드/4. 질문/질문에 대한 답변 가이드/5. 질문/질문에 대한 답변 가이드/6. 질문/질문에 대한 답변 가이드  이렇게 질문 뒤에 /, 질문에 대한 답변 가이드 뒤에 /로 구분하게 만든 문자열로 만들어주세요";
+                "    1. 질문/질문에 대한 답변 가이드/2. 질문/질문에 대한 답변 가이드/3. 질문/질문에 대한 답변 가이드/4. 질문/질문에 대한 답변 가이드/5. 질문/질문에 대한 답변 가이드/6. 질문/질문에 대한 답변 가이드  이렇게 질문 뒤에 /, 질문에 대한 답변 가이드 뒤에 /로 구분하게 만든 문자열로 만들어주세요" +
+                "\n각 답변 가이드는 여러 문장으로 제공하고 답변 가이드 내 각 문장의 구분은 '@'를 사용해 구분하세요. 답변 가이드에만 '@'를 사용한 구분을 사용하세요." +
+                "\n답변 가이드 내 각 문장은 완전한 문장으로 제공하세요." +
+                "\n최종적으로 다음과 같은 형식으로 제공되어야 합니다: 1. 질문/질문에 대한 답변 가이드1@질문에 대한 답변 가이드2/2. 질문/질문에 대한 답변 가이드......" +
+                "\n중요: 답변 가이드를 제공할 때에는 답변 예시가 아닌 답변 가이드를 제공하세요. 답변을 어떻게 하면 좋은지에 관한 조언을 제공하세요.";
         String fineTuning_answer = "네 알겠습니다.";
 
         Message user = new Message("user", fineTuning);
@@ -189,8 +193,8 @@ public class GptApiService {
 
         // Instruction for generating new answer guides
         StringBuilder promptBuilder = new StringBuilder();
-        promptBuilder.append("주어지는 면접 질문들에 대한 답변 가이드를 제공할 것입니다. ");
-        promptBuilder.append("각 질문에 대해 어떻게 답변해야 하는지에 대한 답변 가이드를 제공해 주세요. 답변 예시가 아닌 가이드입니다. ");
+        promptBuilder.append("주어지는 면접 질문들에 대한 답변 가이드를 제공할 것입니다.\n");
+        promptBuilder.append("각 질문에 대해 어떻게 답변해야 하는지에 대한 답변 가이드를 제공해 주세요.\n");
         promptBuilder.append("사용자가 강조하고 싶은 점과 이력이 있다면 반영해서 답변 가이드를 만들어 주세요.\n\n");
 
         // Append the questions
@@ -202,7 +206,12 @@ public class GptApiService {
         promptBuilder.append("[질문 번호]. [답변 가이드]\n");
         promptBuilder.append("질문 번호 뒤에 바로 답변 가이드를 적어주세요. 형식은 동일하게 유지해 주세요.\n");
         promptBuilder.append("답변 가이드 내용에 질문은 포함하지 마세요.\n");
-        promptBuilder.append("각 답변 가이드는 줄바꿈(\\n)으로 구분하세요.\n");
+        promptBuilder.append("각 답변 가이드는 '!!'로 구분하세요.\n");
+        promptBuilder.append("답변 가이드는 여러 문장으로 제공하고 각 문장의 구분은 '@'를 사용해 구분하세요.\n");
+        promptBuilder.append("답변 가이드 내 각 문장은 완전한 문장으로 제공하세요.");
+        promptBuilder.append("최종적으로 다음과 같은 형식으로 제공되어야 합니다: 1. 답변 가이드1@답변가이드2!!2. 답변 가이드1@......\n");
+        promptBuilder.append("중요: 당신이 제공해야 하는 것은 답변 가이드입니다. 답변 예시가 아닌 답변 가이드를 제공하세요. 답변을 어떻게 하면 좋은지에 관한 조언입니다.\n");
+        promptBuilder.append("사용자는 당신의 답변이 답변 가이드라는 것을 이미 알고 있습니다. 답변 가이드라고 명시하지 마세요.");
 
         Message userMessage = new Message("user", promptBuilder.toString());
         messageList.add(userMessage);
@@ -221,7 +230,7 @@ public class GptApiService {
         log.info("GPT response content:\n" + responseContent);
 
         // Split the response by lines
-        String[] lines = responseContent.split("\n");
+        String[] lines = responseContent.split("!!");
 
         List<String> answerGuides = new ArrayList<>();
 
