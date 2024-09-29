@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.*;
 import org.team5.interview_partner.common.api.Api;
 import org.team5.interview_partner.domain.interviewanswer.dto.InterviewAnswerListResponse;
 import org.team5.interview_partner.domain.interviewanswer.dto.InterviewAnswerRequest;
+import org.team5.interview_partner.domain.interviewanswer.dto.InterviewAnswerResponse;
 import org.team5.interview_partner.domain.interviewanswer.service.InterviewAnswerService;
 
 @RestController
@@ -28,6 +29,14 @@ public class InterviewAnswerApiController {
     ){
         InterviewAnswerListResponse interviewAnswerListResponse = interviewAnswerService.interviewAnswerList(gptQuestionId);
         return Api.OK(interviewAnswerListResponse);
+    }
+
+    @GetMapping("/{interviewAnswerId}")
+    public Api<InterviewAnswerResponse> interviewAnswer(
+            @PathVariable("interviewAnswerId") int interviewAnswerId
+    ){
+        InterviewAnswerResponse interviewAnswerResponse = interviewAnswerService.interviewAnswer(interviewAnswerId);
+        return Api.OK(interviewAnswerResponse);
     }
 
 }

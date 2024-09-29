@@ -20,14 +20,18 @@ public class InterviewAnswerMapper {
     }
 
     public static InterviewAnswerResponse toResponse(InterviewAnswerEntity interviewAnswerEntity){
+
         return Optional.ofNullable(interviewAnswerEntity)
                 .map(it->{
                     String feedback = interviewAnswerEntity.getFeedback().replace("\n","");
-                    List<String> feedBackList = List.of(feedback.split("/"));
+                    feedback = feedback.replace("\"","");
+                    List<String> feedBackList = List.of(feedback.split("##"));
+                    int size = feedBackList.size();
+                    List<String> lastSixFeedBackList = feedBackList.subList(Math.max(size - 6, 0), size);
                     return InterviewAnswerResponse.builder()
                             .answer(interviewAnswerEntity.getAnswer())
                             .id(interviewAnswerEntity.getId())
-                            .feedbackList(feedBackList)
+                            .feedbackList(lastSixFeedBackList)
                             .gptQuestionId(interviewAnswerEntity.getGptQuestion().getId())
                             .build();
                 }).orElseThrow(()->new ApiException(ErrorCode.BAD_REQUEST));

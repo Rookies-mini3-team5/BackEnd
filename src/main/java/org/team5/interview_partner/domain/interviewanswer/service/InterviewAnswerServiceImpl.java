@@ -56,4 +56,13 @@ public class InterviewAnswerServiceImpl implements InterviewAnswerService{
 
         return interviewAnswerListResponse;
     }
+
+    @Override
+    public InterviewAnswerResponse interviewAnswer(int interviewAnswerId) {
+        InterviewAnswerEntity interviewAnswerEntity = interviewAnswerRepository.findById(interviewAnswerId)
+                .orElseThrow(()->new ApiException(ErrorCode.BAD_REQUEST,"interviewAnswerId에 해당하는 데이터가 없습니다."));
+
+        InterviewAnswerResponse interviewAnswerResponse = InterviewAnswerMapper.toResponse(interviewAnswerEntity);
+        return interviewAnswerResponse;
+    }
 }

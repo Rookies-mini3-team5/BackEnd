@@ -117,7 +117,7 @@ public class GptApiService {
     }
 
     //유저 질문
-    public GptResponse userQeustion(String question, SectionEntity sectionEntity) {
+    public GptResponse userQuestion(String question, SectionEntity sectionEntity) {
 
         List<UserQuestionEntity> userQuestionEntities = userQuestionRepository.findAllBySectionEntity(sectionEntity);
         List<Message> messageList = new ArrayList<>();
@@ -162,15 +162,17 @@ public class GptApiService {
 
         if (interviewAnswerEntities.isEmpty()) {
             fineTuning = "이제 \"" + gptQuestionEntity.getQuestion() + "\"에 대해 대답을 할게 내가 대답한 후에 내가 잘 대답했는지 피드백 해줘" +
-                    " 대답 예시는 " +
-                    "1. 면접 대답에 대한 피드백/2. 면접 대답에 대한 피드백/3. 면접 대답에 대한 피드백/4. 면접 대답에 대한 피드백/5. 면접 대답에 대한 피드백/6. 면접 대답에 대한 피드백/  이렇게 질문 뒤에 /, 질문에 대한 답변 가이드 뒤에 /로 구분하고 문자열을 6개의 문장을 자를거라 1부터 6까지의 답변만 만들어주세요 문장에 줄바꿈은 필요 없습니다.";
-            fineTuning_answer = "네 알겠습니다. 대답 예시를 참고하여 면접 질문에 대한 대답을 피드백 해드리겠습니다.";
+                    "앞으로 대답 예시는 전부 다 " +
+                    "1. 면접에 대한 피드백##2. ##3. ##4. ##5. ##6.  이렇게 질문에 대한 답변 가이드 뒤에 ##로 피드백을 구분하고 6개의 답변만 만들어주세요 문장에 줄바꿈은 필요 없습니다.";
+            fineTuning_answer = "네 알겠습니다. 앞으로 모든 대답에 대해 대답 예시를 참고하여 면접 대답에 대한 피드백을 해준뒤 ##을 통해 각 피드백을 구분하고 6개의 답변을 만들은 뒤 줄바꿈없이하여 면접 질문에 대한 대답을 피드백 해드리겠습니다.";
             Message user = new Message("user", fineTuning);
             Message gpt = new Message("system", fineTuning_answer);
             messageList.add(user);
             messageList.add(gpt);
         }
-        answer = answer+" 대답 예시는 1. 면접 대답에 대한 피드백/2. /3. /4. /5. /6.   이렇게 질문 뒤에 / 질문에 대한 답변 가이드 뒤에 /로 구분하고 줄바꿈이 없는 문자열로 만들어주세요. 문자열을 6개의 문장을 자를거라 1부터 6까지의 답변만 만들어주세요  이전에 해준 피드백중 장점들은 최대한 적게 말해주세요.";
+        answer = "\""+gptQuestionEntity.getQuestion() + "\"에 대한 대답으로 "+answer+"이라 할게 내가 대답한 후에 내가 잘 대답했는지 피드백 해줘" +
+                "대답 예시는 " +
+                "1. 면접에 대한 피드백##2. ##3. ##4. ##5. ##6.  이렇게 질문에 대한 답변 가이드 뒤에 ##로 피드백을 구분하고 6개의 답변만 만들어주세요 문장에 줄바꿈은 필요 없습니다.";;
         Message userAnswer = new Message("user", answer);
         messageList.add(userAnswer);
         GptRequest gptRequest = GptRequest.builder()
