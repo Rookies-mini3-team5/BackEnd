@@ -27,7 +27,7 @@ public class UserQuestionMapper {
                             .id(userQuestionEntity.getId())
                             .answer(userQuestionEntity.getAnswer())
                             .question(userQuestionEntity.getQuestion())
-                            .sectionId(userQuestionEntity.getId())
+                            .sectionId(userQuestionEntity.getSectionEntity().getId())
                             .build();
                 }).orElseThrow(()->new ApiException(ErrorCode.BAD_REQUEST));
     }
