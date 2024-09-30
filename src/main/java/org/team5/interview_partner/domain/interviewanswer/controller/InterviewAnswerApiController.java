@@ -1,6 +1,7 @@
 package org.team5.interview_partner.domain.interviewanswer.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.team5.interview_partner.common.api.Api;
 import org.team5.interview_partner.domain.interviewanswer.dto.InterviewAnswerListResponse;
@@ -17,25 +18,28 @@ public class InterviewAnswerApiController {
     @PostMapping("/{gptQuestionId}")
     public Api addInterviewAnswer(
             @PathVariable("gptQuestionId") int gptQuestionId,
-            @RequestBody InterviewAnswerRequest interviewAnswerRequest
+            @RequestBody InterviewAnswerRequest interviewAnswerRequest,
+            Authentication authentication
     ){
-        interviewAnswerService.addInterviewAnswer(gptQuestionId,interviewAnswerRequest);
+        interviewAnswerService.addInterviewAnswer(gptQuestionId,interviewAnswerRequest,authentication);
         return Api.CREATE();
     }
 
     @GetMapping("/list/{gptQuestionId}")
     public Api<InterviewAnswerListResponse> interviewAnswerList(
-            @PathVariable("gptQuestionId") int gptQuestionId
+            @PathVariable("gptQuestionId") int gptQuestionId,
+            Authentication authentication
     ){
-        InterviewAnswerListResponse interviewAnswerListResponse = interviewAnswerService.interviewAnswerList(gptQuestionId);
+        InterviewAnswerListResponse interviewAnswerListResponse = interviewAnswerService.interviewAnswerList(gptQuestionId,authentication);
         return Api.OK(interviewAnswerListResponse);
     }
 
     @GetMapping("/{interviewAnswerId}")
     public Api<InterviewAnswerResponse> interviewAnswer(
-            @PathVariable("interviewAnswerId") int interviewAnswerId
+            @PathVariable("interviewAnswerId") int interviewAnswerId,
+            Authentication authentication
     ){
-        InterviewAnswerResponse interviewAnswerResponse = interviewAnswerService.interviewAnswer(interviewAnswerId);
+        InterviewAnswerResponse interviewAnswerResponse = interviewAnswerService.interviewAnswer(interviewAnswerId,authentication);
         return Api.OK(interviewAnswerResponse);
     }
 
