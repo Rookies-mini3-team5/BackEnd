@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import org.team5.interview_partner.common.api.Api;
 import org.team5.interview_partner.domain.gptquestion.dto.GptQuestionListResponse;
+import org.team5.interview_partner.domain.gptquestion.dto.GptQuestionResponse;
 import org.team5.interview_partner.domain.gptquestion.service.GptQuestionService;
 
 @RestController
@@ -17,6 +18,14 @@ public class GptQuestionApiController {
         @PathVariable("sectionId") int sectionId
     ){
         GptQuestionListResponse response = gptQuestionService.gptQuestionList(sectionId);
+        return Api.OK(response);
+    }
+
+    @GetMapping("/{gptQuestionId}")
+    public Api<GptQuestionResponse> gptQuestion(
+            @PathVariable("gptQuestionId") int gptQuestionId
+    ){
+        GptQuestionResponse response = gptQuestionService.gptQuestion(gptQuestionId);
         return Api.OK(response);
     }
 }

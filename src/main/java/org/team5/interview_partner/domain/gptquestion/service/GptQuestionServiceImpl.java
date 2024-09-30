@@ -34,4 +34,12 @@ public class GptQuestionServiceImpl implements GptQuestionService{
                 .build();
         return gptQuestionListResponse;
     }
+
+    @Override
+    public GptQuestionResponse gptQuestion(int sectionId) {
+        GptQuestionEntity gptQuestionEntity = gptQeustionRepository.findById(sectionId)
+                .orElseThrow(()->new ApiException(ErrorCode.BAD_REQUEST,"sectionId에 대한 데이터가 없습니다."));
+        GptQuestionResponse gptQuestionResponse = GptQuestionMapper.toResponse(gptQuestionEntity);
+        return gptQuestionResponse;
+    }
 }
