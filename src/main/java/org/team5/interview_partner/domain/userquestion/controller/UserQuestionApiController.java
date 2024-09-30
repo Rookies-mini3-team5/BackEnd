@@ -1,6 +1,7 @@
 package org.team5.interview_partner.domain.userquestion.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.team5.interview_partner.common.api.Api;
 import org.team5.interview_partner.common.error.ErrorCode;
@@ -30,27 +31,30 @@ public class UserQuestionApiController {
     public Api addUserQuestion(
             @PathVariable("sectionId") int sectionId,
             @RequestBody
-            UserQuestionRequest userQuestionRequest
+            UserQuestionRequest userQuestionRequest,
+            Authentication authentication
     ){
-        userQuestionService.addUserQuestion(sectionId,userQuestionRequest);
+        userQuestionService.addUserQuestion(sectionId,userQuestionRequest,authentication);
         return Api.CREATE();
     }
 
     //질문 답변 목록 조회
     @GetMapping("/list/{sectionId}")
     public Api<UserQuestionListResponse> userQuestionList(
-            @PathVariable("sectionId") int sectionId
+            @PathVariable("sectionId") int sectionId,
+            Authentication authentication
     ){
-        UserQuestionListResponse userQuestionListResponse = userQuestionService.userQuestionList(sectionId);
+        UserQuestionListResponse userQuestionListResponse = userQuestionService.userQuestionList(sectionId,authentication);
         return Api.OK(userQuestionListResponse);
     }
 
     //질문 답변 조회
     @GetMapping("/one/{userQuestionId}")
     public Api<UserQuestionResponse> userQuestion(
-            @PathVariable("userQuestionId") int userQuestionId
+            @PathVariable("userQuestionId") int userQuestionId,
+            Authentication authentication
     ){
-        UserQuestionResponse userQuestionResponse = userQuestionService.userQeustion(userQuestionId);
+        UserQuestionResponse userQuestionResponse = userQuestionService.userQuestion(userQuestionId,authentication);
         return Api.OK(userQuestionResponse);
     }
 
