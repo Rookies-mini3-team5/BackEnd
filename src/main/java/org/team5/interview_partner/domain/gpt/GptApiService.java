@@ -132,14 +132,14 @@ public class GptApiService {
             messageList.add(gpt);
         });
         String condition = "";
-        if(!sectionEntity.getEmphasize().isEmpty() && !sectionEntity.getResume().isEmpty()){
-            condition = "면접질문에 대해 저의 이력과 강조점을 참고해서";
-        }else if(!sectionEntity.getEmphasize().isEmpty()){
-            condition = "면접질문에 대해 저의 강조점을 참고해서";
-        }else if(!sectionEntity.getResume().isEmpty()) {
-            condition = "면접질문에 대해 이력을 참고해서";
+        if(sectionEntity.getEmphasize() != null && !sectionEntity.getEmphasize().isEmpty() && sectionEntity.getResume() != null && !sectionEntity.getResume().isEmpty()){
+            condition = "저의 이력과 강조점을 참고해서";
+        }else if(sectionEntity.getEmphasize() != null && !sectionEntity.getEmphasize().isEmpty()){
+            condition = "저의 강조점을 참고해서";
+        }else if(sectionEntity.getResume() != null && !sectionEntity.getResume().isEmpty()) {
+            condition = "저의 이력을 참고해서";
         }
-        question = question+"에 대한 "+condition+" 면접 질문에 대한 대답을 만들어 주세요. 만약 이력과 강조점이 없다면 임의로 대답을 만들어 주세요. 마크다운과 줄바꿈은 사용하지 말고 대답해주세요. 만약 면접 질문이 없거나 면접 질문이 이상하다면 \"면접 질문을 다시 적어주세요\"라고 대답해 주세요.";
+        question = "면접 질문 "+question+"에 대해 "+condition+" 모범 대답을 만들어 주세요. 마크다운과 줄바꿈은 사용하지 말고 대답해주세요. 만약 면접 질문이 없거나 면접 질문이 답변하기에 적절하지 않은 질문이라면 \"면접 질문을 다시 적어주세요\"라고 대답해 주세요. 사용자는 면접 대답을 요청하고 있다는 것을 이미 알고 있으니 면접 대답이라고 명시하지 마세요.";
 
         Message userQuestion = new Message("user", question);
         messageList.add(userQuestion);
