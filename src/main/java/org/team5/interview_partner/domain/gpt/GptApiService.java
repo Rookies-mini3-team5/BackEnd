@@ -131,7 +131,16 @@ public class GptApiService {
             messageList.add(user);
             messageList.add(gpt);
         });
-        question = question+"에 대한 면접질문에 대해 저의 이력과 강조점을 참고해서 면접 질문에 대한 대답을 만들어 주세요. 마크다운과 줄바꿈은 사용하지 말고 대답해주세요. 만약 면접 질문이 이상하다면 \"면접 질문을 다시 적어주세요\"라고 대답해 주세요.";
+        String condition = "";
+        if(!sectionEntity.getEmphasize().isEmpty() && !sectionEntity.getResume().isEmpty()){
+            condition = "면접질문에 대해 저의 이력과 강조점을 참고해서";
+        }else if(!sectionEntity.getEmphasize().isEmpty()){
+            condition = "면접질문에 대해 저의 강조점을 참고해서";
+        }else if(!sectionEntity.getResume().isEmpty()) {
+            condition = "면접질문에 대해 이력을 참고해서";
+        }
+        question = question+"에 대한 "+condition+" 면접 질문에 대한 대답을 만들어 주세요. 만약 이력과 강조점이 없다면 임의로 대답을 만들어 주세요. 마크다운과 줄바꿈은 사용하지 말고 대답해주세요. 만약 면접 질문이 없거나 면접 질문이 이상하다면 \"면접 질문을 다시 적어주세요\"라고 대답해 주세요.";
+
         Message userQuestion = new Message("user", question);
         messageList.add(userQuestion);
         GptRequest gptRequest = GptRequest.builder()

@@ -28,6 +28,12 @@ public class Api<T> {
         api.result = Result.CREATE();
         return api;
     }
+    public static <T>  Api<T> CREATE(T data){
+        var api = new Api<T>();
+        api.result = Result.CREATE();
+        api.body = data;
+        return api;
+    }
     //에러 응답
     public static Api<Object> ERROR(ErrorCodeIfs errorCodeIfs){
         var api = new Api<Object>();

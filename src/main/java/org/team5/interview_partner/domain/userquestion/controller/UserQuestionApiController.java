@@ -28,14 +28,14 @@ public class UserQuestionApiController {
 
     //유저 질문
     @PostMapping("/{sectionId}")
-    public Api addUserQuestion(
+    public Api<UserQuestionResponse> addUserQuestion(
             @PathVariable("sectionId") int sectionId,
             @RequestBody
             UserQuestionRequest userQuestionRequest,
             Authentication authentication
     ){
-        userQuestionService.addUserQuestion(sectionId,userQuestionRequest,authentication);
-        return Api.CREATE();
+        UserQuestionResponse userQuestionResponse = userQuestionService.addUserQuestion(sectionId,userQuestionRequest,authentication);
+        return Api.CREATE(userQuestionResponse);
     }
 
     //질문 답변 목록 조회
