@@ -11,7 +11,4 @@ import java.util.List;
 @AllArgsConstructor
 public class GptResponse {
     private List<Choice> choices;
-
-
-
 }

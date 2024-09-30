@@ -10,5 +10,4 @@ import lombok.NoArgsConstructor;
 public class Choice {
     private int index;
     private Message message;
-
 }

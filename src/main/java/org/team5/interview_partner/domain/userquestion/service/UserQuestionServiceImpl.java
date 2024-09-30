@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 import org.team5.interview_partner.common.error.ErrorCode;
 import org.team5.interview_partner.common.exception.ApiException;
 import org.team5.interview_partner.domain.gpt.GptApiService;
-import org.team5.interview_partner.domain.gpt.dto.Choice;
 import org.team5.interview_partner.domain.gpt.dto.GptResponse;
 import org.team5.interview_partner.domain.user.dto.CustomUserDetail;
 import org.team5.interview_partner.domain.userquestion.dto.UserQuestionListResponse;
@@ -42,7 +41,6 @@ public class UserQuestionServiceImpl implements UserQuestionService {
         String question = gptResponse.getChoices().get(0).getMessage().getContent();
         userQuestionEntity.setAnswer(question);
         userQuestionRepository.save(userQuestionEntity);
-
     }
 
     //질문 답변 목록 조회
