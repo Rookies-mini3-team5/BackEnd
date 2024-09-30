@@ -2,7 +2,7 @@ spring:
   application:
     name: interview_partner_be
   profiles:
-    active: dev
+    active: prod
   flyway:
     location: classpath:/db/migration/{vendor}
     baselineOnMigrate: true
