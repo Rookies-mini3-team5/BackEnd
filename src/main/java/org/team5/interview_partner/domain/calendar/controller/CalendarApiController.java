@@ -15,7 +15,7 @@ public class CalendarApiController {
     private final CalendarService calendarService;
 
     //메모 생성
-    @PostMapping("/")
+    @PostMapping("")
     public Api insertCalendar(
             @RequestBody
             CalendarRequest calendarRequest,
@@ -26,7 +26,7 @@ public class CalendarApiController {
     }
 
     //매모 목록 조회
-    @GetMapping("/")
+    @GetMapping("/list")
     public Api<CalendarListResponse> calendarList(
             Authentication authentication,
             @RequestParam(name = "year") String year,

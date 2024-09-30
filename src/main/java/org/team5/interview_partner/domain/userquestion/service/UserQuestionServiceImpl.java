@@ -34,7 +34,7 @@ public class UserQuestionServiceImpl implements UserQuestionService {
         UserQuestionEntity userQuestionEntity = UserQuestionMapper.toEntity(userQuestionRequest);
         var sectionEntity = sectionRepository.findById(sectionId).
                 orElseThrow(()->new ApiException(ErrorCode.NULL_POINT,"section id에 해당하는 값이 없습니다."));
-        GptResponse gptResponse = gptApiService.userQeustion(userQuestionRequest.getQuestion(),sectionEntity);
+        GptResponse gptResponse = gptApiService.userQuestion(userQuestionRequest.getQuestion(),sectionEntity);
         userQuestionEntity.setSectionEntity(sectionEntity);
         String question = gptResponse.getChoices().get(0).getMessage().getContent();
         userQuestionEntity.setAnswer(question);
