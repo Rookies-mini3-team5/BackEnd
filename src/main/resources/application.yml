@@ -1,4 +1,6 @@
 spring:
+  mvc:
+    static-path-pattern: /static/**
   application:
     name: interview_partner_be
   profiles:
