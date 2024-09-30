@@ -90,10 +90,10 @@ public class GptApiService {
         List<Message> messageList = fineTuning(sectionId);
         String fineTuning = "당신은 이제 면접 예상질문을 생성할 것 입니다. 면접 예상 질문과 질문에 대해 어떻게 답변해야 하는지에 대한 답변 가이드를 함께 제공해 주세요. 면접 예상 질문을 생성할 때에는 사용자가 강조하고 싶은 점이 있어도 질문에 반영하지 마세요." +
                 "\n" +
-                "    1. 질문/질문에 대한 답변 가이드/2. 질문/질문에 대한 답변 가이드/3. 질문/질문에 대한 답변 가이드/4. 질문/질문에 대한 답변 가이드/5. 질문/질문에 대한 답변 가이드/6. 질문/질문에 대한 답변 가이드  이렇게 질문 뒤에 /, 질문에 대한 답변 가이드 뒤에 /로 구분하게 만든 문자열로 만들어주세요" +
+                "    1. 질문//질문에 대한 답변 가이드//2. 질문//질문에 대한 답변 가이드//3. 질문//질문에 대한 답변 가이드//4. 질문//질문에 대한 답변 가이드//5. 질문//질문에 대한 답변 가이드//6. 질문//질문에 대한 답변 가이드  이렇게 질문 뒤에 //, 질문에 대한 답변 가이드 뒤에 //로 구분하게 만든 문자열로 만들어주세요" +
                 "\n각 답변 가이드는 여러 문장으로 제공하고 답변 가이드 내 각 문장의 구분은 '@'를 사용해 구분하세요. 답변 가이드에만 '@'를 사용한 구분을 사용하세요." +
                 "\n답변 가이드 내 각 문장은 완전한 문장으로 제공하세요." +
-                "\n최종적으로 다음과 같은 형식으로 제공되어야 합니다: 1. 질문/질문에 대한 답변 가이드1@질문에 대한 답변 가이드2/2. 질문/질문에 대한 답변 가이드......" +
+                "\n최종적으로 다음과 같은 형식으로 제공되어야 합니다: 1. 질문//질문에 대한 답변 가이드1@질문에 대한 답변 가이드2//2. 질문/질문에 대한 답변 가이드......" +
                 "\n중요: 답변 가이드를 제공할 때에는 답변 예시가 아닌 답변 가이드를 제공하세요. 답변을 어떻게 하면 좋은지에 관한 조언을 제공하세요.";
         String fineTuning_answer = "네 알겠습니다.";
 
@@ -115,7 +115,7 @@ public class GptApiService {
                 .build();
         GptResponse gptResponse = restTemplate.postForObject(url, gptRequest, GptResponse.class);
         log.info(gptResponse.getChoices().get(0).getMessage().getContent());
-        List<String> question = Arrays.asList(gptResponse.getChoices().get(0).getMessage().getContent().split("/"));
+        List<String> question = Arrays.asList(gptResponse.getChoices().get(0).getMessage().getContent().split("//"));
         //List의 홀수 index는 예상 면접 질문 짝수 index는 답변 가이드
         return question;
     }
@@ -186,7 +186,8 @@ public class GptApiService {
         }
         answer = "\""+gptQuestionEntity.getQuestion() + "\"에 대한 대답으로 "+answer+"이라 할게 내가 대답한 후에 내가 잘 대답했는지 피드백 해줘" +
                 "대답 예시는 " +
-                "1. 면접에 대한 피드백##2. ##3. ##4. ##5. ##6.  이렇게 질문에 대한 답변 가이드 뒤에 ##로 피드백을 구분하고 6개의 답변만 만들어주세요 문장에 줄바꿈은 필요 없습니다.";;
+                "1. 면접에 대한 피드백##2. ##3. ##4. ##5. ##6.  이렇게 질문에 대한 답변 가이드 뒤에 ##로 피드백을 구분하고 6개의 답변만 만들어주세요 문장에 줄바꿈은 필요 없습니다." +
+                "\n 사용자는 면접에 대한 피드백을 요청하고 있다는 것을 이미 알고 있습니다. 피드백이라고 명시하지 마세요.";
         Message userAnswer = new Message("user", answer);
         messageList.add(userAnswer);
         GptRequest gptRequest = GptRequest.builder()
