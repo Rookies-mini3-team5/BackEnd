@@ -32,7 +32,7 @@ public class UserQuestionServiceImpl implements UserQuestionService {
 
     //유저 질문
     @Override
-    public void addUserQuestion(int sectionId, UserQuestionRequest userQuestionRequest,Authentication authentication) {
+    public UserQuestionResponse addUserQuestion(int sectionId, UserQuestionRequest userQuestionRequest,Authentication authentication) {
         UserQuestionEntity userQuestionEntity = UserQuestionMapper.toEntity(userQuestionRequest);
         var sectionEntity = sectionRepository.findById(sectionId).
                 orElseThrow(()->new ApiException(ErrorCode.NULL_POINT,"section id에 해당하는 값이 없습니다."));
@@ -42,7 +42,9 @@ public class UserQuestionServiceImpl implements UserQuestionService {
         String question = gptResponse.getChoices().get(0).getMessage().getContent();
         question = question.replace("\n","").replace("--","").replace("\\","").replace("/","");
         userQuestionEntity.setAnswer(question);
-        userQuestionRepository.save(userQuestionEntity);
+        UserQuestionEntity newUserQuestionEntity = userQuestionRepository.save(userQuestionEntity);
+        UserQuestionResponse userQuestionResponse = UserQuestionMapper.toResponse(newUserQuestionEntity);
+        return userQuestionResponse;
 
     }
 
