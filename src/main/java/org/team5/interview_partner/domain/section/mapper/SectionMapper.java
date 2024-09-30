@@ -23,9 +23,10 @@ public class SectionMapper {
                 .build();
     }
 
-    public static SectionEntity toEntity(UsersEntity user, JobEntity job, OccupationalEntity occupational){
+    public static SectionEntity toEntity(UsersEntity user, JobEntity job, OccupationalEntity occupational, String name){
         return SectionEntity.builder()
                 .user(user)
+                .name(name)
                 .job(job)
                 .occupational(occupational)
                 .build();
