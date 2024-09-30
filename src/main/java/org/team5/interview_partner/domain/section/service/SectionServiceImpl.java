@@ -24,6 +24,7 @@ import org.team5.interview_partner.entity.user.UsersEntity;
 
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -127,12 +128,13 @@ public class SectionServiceImpl implements SectionService {
 
                 GptQuestionEntity gptQuestionEntity = GptQuestionMapper.toEntity(savedSection, expectedQuestion, answerGuide);
                 GptQuestionEntity savedGptQuestionEntity = gptQuestionRepository.save(gptQuestionEntity);
+                List<String> answerGuideList = Arrays.asList(answerGuide.split("@"));
 
                 // Create an AddSectionResumeResponse object and add it to the list
                 AddSectionResumeResponse response = AddSectionResumeResponse.builder()
                         .questionId(savedGptQuestionEntity.getId())
                         .expectedQuestion(expectedQuestion)
-                        .answerGuide(answerGuide)
+                        .answerGuide(answerGuideList)
                         .build();
 
                 addSectionResume.add(response);
