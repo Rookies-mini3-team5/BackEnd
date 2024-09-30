@@ -124,15 +124,16 @@ public class GptApiService {
     public GptResponse userQuestion(String question, SectionEntity sectionEntity) {
 
         List<UserQuestionEntity> userQuestionEntities = userQuestionRepository.findAllBySectionEntity(sectionEntity);
-        List<Message> messageList = new ArrayList<>();
+        List<Message> messageList = fineTuning(sectionEntity.getId());
         userQuestionEntities.forEach(it -> {
             Message user = new Message("user", it.getQuestion());
             Message gpt = new Message("system", it.getAnswer());
             messageList.add(user);
             messageList.add(gpt);
         });
-        Message userQuestioin = new Message("user", question);
-        messageList.add(userQuestioin);
+        question = question+"에 대한 면접질문에 대해 저의 이력과 강조점을 참고해서 면접 질문에 대한 대답을 만들어 주세요. 마크다운과 줄바꿈은 사용하지 말고 대답해주세요. 만약 면접 질문이 이상하다면 \"면접 질문을 다시 적어주세요\"라고 대답해 주세요.";
+        Message userQuestion = new Message("user", question);
+        messageList.add(userQuestion);
         GptRequest gptRequest = GptRequest.builder()
                 .model(model)
                 .messages(messageList)

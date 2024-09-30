@@ -39,6 +39,7 @@ public class UserQuestionServiceImpl implements UserQuestionService {
         GptResponse gptResponse = gptApiService.userQuestion(userQuestionRequest.getQuestion(),sectionEntity);
         userQuestionEntity.setSectionEntity(sectionEntity);
         String question = gptResponse.getChoices().get(0).getMessage().getContent();
+        question = question.replace("\n","").replace("--","").replace("\\","").replace("/","");
         userQuestionEntity.setAnswer(question);
         userQuestionRepository.save(userQuestionEntity);
     }
