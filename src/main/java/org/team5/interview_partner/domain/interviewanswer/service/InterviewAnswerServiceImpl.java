@@ -37,7 +37,6 @@ public class InterviewAnswerServiceImpl implements InterviewAnswerService{
         interviewAnswerEntity.setGptQuestion(gptQuestionEntity);
 
         interviewAnswerRepository.save(interviewAnswerEntity);
-
     }
 
     @Override

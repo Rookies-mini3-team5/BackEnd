@@ -17,4 +17,6 @@ public class InterviewAnswerResponse {
     private String answer;
 
     private List<String> feedbackList;
+
+    private String question;
 }

@@ -32,6 +32,7 @@ public class InterviewAnswerMapper {
                             .answer(interviewAnswerEntity.getAnswer())
                             .id(interviewAnswerEntity.getId())
                             .feedbackList(lastSixFeedBackList)
+                            .question(interviewAnswerEntity.getGptQuestion().getQuestion())
                             .gptQuestionId(interviewAnswerEntity.getGptQuestion().getId())
                             .build();
                 }).orElseThrow(()->new ApiException(ErrorCode.BAD_REQUEST));
