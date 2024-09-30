@@ -73,7 +73,36 @@ public class SectionServiceImpl implements SectionService {
             JobEntity jobEntity = job.get();
             OccupationalEntity occupationalEntity = occupational.get();
 
-            SectionEntity sectionEntity = SectionMapper.toEntity(user, jobEntity, occupationalEntity);
+            // 기본 name 설정: "occupationalName/jobName"
+            String baseName = occupationalEntity.getOccupationalName() + "-" + jobEntity.getJobName();
+            String sectionName = baseName;
+
+            // 중복된 이름이 있는지 확인
+            List<SectionEntity> existingSections = sectionRepository.findAllByNameStartingWith(baseName);
+
+            if (!existingSections.isEmpty()) {
+                int maxSuffix = 1;
+                for (SectionEntity existingSection : existingSections) {
+                    String existingName = existingSection.getName();
+                    // 숫자가 붙어 있는지 확인
+                    if (existingName.length() > baseName.length()) {
+                        try {
+                            // 숫자를 추출해서 비교
+                            String suffix = existingName.substring(baseName.length());
+                            int suffixValue = Integer.parseInt(suffix);
+                            if (suffixValue > maxSuffix) {
+                                maxSuffix = suffixValue;
+                            }
+                        } catch (NumberFormatException ignored) {
+                            // 숫자가 아닌 경우는 무시
+                        }
+                    }
+                }
+                // 숫자를 1 증가시켜 새로운 이름 설정
+                sectionName = baseName + (maxSuffix + 1);
+            }
+
+            SectionEntity sectionEntity = SectionMapper.toEntity(user, jobEntity, occupationalEntity, sectionName);
             SectionEntity section = sectionRepository.save(sectionEntity);
 
             return AddSectionResponse.builder()
