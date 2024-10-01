@@ -73,7 +73,7 @@ public class UserServiceImpl implements UserService {
                 fileSize = String.valueOf(file.getSize());
             } else {
                 // Use default picture
-                storedFilePath = Paths.get(uploadPath, "defaultPicture.jpeg").toString();
+                    storedFilePath = Paths.get(uploadPath, "defaultPicture.jpeg").toString();
                 originalFileName = "defaultPicture.jpeg";
 
                 // Get the file size of the default picture
@@ -155,7 +155,7 @@ public class UserServiceImpl implements UserService {
             UserPictureEntity userPicture = userPictureRepository.findByUserId(user.getId());
 
             // 회원가입 시 프사가 설정되므로 기본 프사가 아닐 시 삭제 후 작업
-            if (!Objects.equals(userPicture.getFilePath(), Paths.get(uploadPath, "defaultPicture.png").toString())) {
+            if (!Objects.equals(userPicture.getFilePath(), Paths.get(uploadPath, "defaultPicture.jpeg").toString())) {
                 fileUtils.deleteFile(userPicture.getFilePath());
             }
 
