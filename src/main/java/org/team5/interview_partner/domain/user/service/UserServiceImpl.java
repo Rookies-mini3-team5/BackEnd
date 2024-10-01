@@ -73,8 +73,8 @@ public class UserServiceImpl implements UserService {
                 fileSize = String.valueOf(file.getSize());
             } else {
                 // Use default picture
-                storedFilePath = Paths.get(uploadPath, "defaultPicture.png").toString();
-                originalFileName = "defaultPicture.png";
+                storedFilePath = Paths.get(uploadPath, "defaultPicture.jpeg").toString();
+                originalFileName = "defaultPicture.jpeg";
 
                 // Get the file size of the default picture
                 Path defaultPicturePath = Paths.get(storedFilePath);
