@@ -139,7 +139,7 @@ public class GptApiService {
         }else if(sectionEntity.getResume() != null && !sectionEntity.getResume().isEmpty()) {
             condition = "저의 이력을 참고해서";
         }
-        question = "면접 질문 "+question+"에 대해 "+condition+" 모범 대답을 만들어 주세요. 마크다운과 줄바꿈은 사용하지 말고 대답해주세요. 만약 면접 질문이 없거나 면접 질문이 답변하기에 적절하지 않은 질문이라면 \"면접 질문을 다시 적어주세요\"라고 대답해 주세요. 사용자는 면접 대답을 요청하고 있다는 것을 이미 알고 있으니 면접 대답이라고 명시하지 마세요.";
+        question = "면접 질문 "+question+"에 대해 "+condition+" 모범 대답을 만들어 주세요. 마크다운과 줄바꿈은 사용하지 말고 대답해주세요. 만약 면접 질문이 없거나 면접 질문이 답변하기에 적절하지 않은 질문이라면 \"면접 질문을 다시 적어주세요\"라고 대답해 주세요. 사용자는 면접 답변을 요청하고 있다는 것을 이미 알고 있습니다. 면접 답변이라는 것을 명시하지 마세요.";
 
         Message userQuestion = new Message("user", question);
         messageList.add(userQuestion);
@@ -175,18 +175,19 @@ public class GptApiService {
 
 
         if (interviewAnswerEntities.isEmpty()) {
-            fineTuning = "이제 \"" + gptQuestionEntity.getQuestion() + "\"에 대해 대답을 할게 내가 대답한 후에 내가 잘 대답했는지 피드백 해줘" +
-                    "앞으로 대답 예시는 전부 다 " +
+            fineTuning = "이제 \"" + gptQuestionEntity.getQuestion() + "\"라는 면접 질문에 대해 대답할 테니 잘 대답했는지 피드백 해주세요.\n" +
+                    "대답 형식은 아래와 같이 해주세요.\n" +
                     "1. 면접에 대한 피드백##2. ##3. ##4. ##5. ##6.  이렇게 질문에 대한 답변 가이드 뒤에 ##로 피드백을 구분하고 6개의 답변만 만들어주세요 문장에 줄바꿈은 필요 없습니다.";
-            fineTuning_answer = "네 알겠습니다. 앞으로 모든 대답에 대해 대답 예시를 참고하여 면접 대답에 대한 피드백을 해준뒤 ##을 통해 각 피드백을 구분하고 6개의 답변을 만들은 뒤 줄바꿈없이하여 면접 질문에 대한 대답을 피드백 해드리겠습니다.";
+            fineTuning_answer = "네 알겠습니다. 앞으로 모든 대답에 대해 대답 예시를 참고하여 면접 대답에 대한 피드백을 해준뒤 ##을 통해 각 피드백을 구분하고 6개의 답변을 만든 뒤 줄바꿈 없이 면접 질문에 대한 대답을 피드백 해드리겠습니다.";
             Message user = new Message("user", fineTuning);
             Message gpt = new Message("system", fineTuning_answer);
             messageList.add(user);
             messageList.add(gpt);
         }
-        answer = "\""+gptQuestionEntity.getQuestion() + "\"에 대한 대답으로 "+answer+"이라 할게 내가 대답한 후에 내가 잘 대답했는지 피드백 해줘" +
-                "대답 예시는 " +
-                "1. 면접에 대한 피드백##2. ##3. ##4. ##5. ##6.  이렇게 질문에 대한 답변 가이드 뒤에 ##로 피드백을 구분하고 6개의 답변만 만들어주세요 문장에 줄바꿈은 필요 없습니다." +
+        answer = "\""+gptQuestionEntity.getQuestion() + "\"라는 면접 질문에 대한 대답으로 "+answer+"라고 대답했습니다. 잘 대답했는지 피드백 해주세요." +
+                "피드백 형식은 다음과 같이 해주세요.\n" +
+                "1. 면접에 대한 피드백##2. ##3. ##4. ##5. ##6.  이렇게 질문에 대한 답변 가이드 뒤에 ##로 피드백을 구분하고 6개의 답변만 만들어주세요. 문장에 줄바꿈은 필요 없습니다.\n" +
+                "당신의 답변은 피드백란에 담겨 서비스로 제공됩니다. 피드백 형식에 맞춘 답변만 제공하세요." +
                 "\n 사용자는 면접에 대한 피드백을 요청하고 있다는 것을 이미 알고 있습니다. 피드백이라고 명시하지 마세요.";
         Message userAnswer = new Message("user", answer);
         messageList.add(userAnswer);
