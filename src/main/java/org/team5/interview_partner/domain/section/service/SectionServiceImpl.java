@@ -78,14 +78,14 @@ public class SectionServiceImpl implements SectionService {
             String sectionName = baseName;
 
             // 중복된 이름이 있는지 확인
-            List<SectionEntity> existingSections = sectionRepository.findAllByNameStartingWith(baseName);
+            List<SectionEntity> existingSections = sectionRepository.findAllByUserAndNameStartingWith(user, baseName);
 
             if (!existingSections.isEmpty()) {
                 int maxSuffix = 1;
                 for (SectionEntity existingSection : existingSections) {
                     String existingName = existingSection.getName();
                     // 숫자가 붙어 있는지 확인
-                    if (existingName.length() > baseName.length()) {
+                    if (existingName.startsWith(baseName) && existingName.length() > baseName.length()) {
                         try {
                             // 숫자를 추출해서 비교
                             String suffix = existingName.substring(baseName.length());
